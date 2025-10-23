@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Public Links</title>
+<!-- Font Awesome for icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Google Font (Montserrat) --><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
+<style>
+/* Import Fontshare Fonts (Satoshi & Nippo) */
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&f[]=nippo@700,500,400&display=swap');
+
+/* Define color palettes for themes */
+:root {
+/* Fonts */
+--font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+--font-heading: 'Nippo', var(--font-body);
+--font-logo: 'Montserrat', var(--font-heading);
+
+/* Dark Theme */
+--dark-bg-body: radial-gradient(ellipse at top, #374151 0%, #111827 70%);
+--dark-bg-navbar: #1f2937;
+--dark-bg-card: #1f2937; /* Base card bg, might be overridden by JS gradient */
+--dark-bg-modal: #1f2937;
+--dark-text-primary: #f3f4f6;
+--dark-text-secondary: #9ca3af;
+--dark-border-light: #374151;
+--dark-border-card: #374151;
+
+/* Delete Button (matching new image) */
+--dark-delete-bg: rgba(0, 0, 0, 0.4); /* Dark semi-transparent */
+--dark-delete-bg-hover: #ef4444; /* Solid red on hover */
+--dark-delete-text: #f3f4f6; /* White-ish */
+--dark-delete-text-hover: #ffffff;
+
+/* Light Theme */
+--light-bg-body: radial-gradient(ellipse at top, #f3f4f6, #ffffff 70%);
+--light-bg-navbar: #ffffff;
+--light-bg-card: #ffffff;
+--light-bg-modal: #ffffff;
+--light-text-primary: #1f2937;
+--light-text-secondary: #6b7280;
+--light-border-light: #e5e7eb;
+--light-border-card: #e5e7eb;
+
+/* Delete Button (light theme) */
+--light-delete-bg: rgba(0, 0, 0, 0.2);
+--light-delete-bg-hover: #ef4444;
+--light-delete-text: #1f2937;
+--light-delete-text-hover: #ffffff;
+
+/* Footer */
+--dark-footer-text: var(--dark-text-secondary);
+--light-footer-text: var(--light-text-secondary);
+
+
+/* Common Accents (New Gradient) */
+--grad-1: #4f46e5; /* Indigo */
+--grad-2: #c026d3; /* Fuchsia */
+--grad-3: #e11d48; /* Rose */
+--grad-1-hover: #e11d48;
+--grad-2-hover: #c026d3;
+--grad-3-hover: #4f46e5;
+}
+
+/* Apply initial dark theme */
+body {
+font-family: var(--font-body);
+background-color: #111827; /* Fallback */
+background-image: var(--dark-bg-body);
+background-repeat: no-repeat;
+background-attachment: fixed;
+margin: 0;
+color: var(--dark-text-primary);
+min-height: 100vh;
+transition: background-image 0.5s ease, color 0.5s ease, background-color 0.5s ease;
+display: flex; /* Added for sticky footer */
+flex-direction: column; /* Added for sticky footer */
+}
+.container {
+max-width: 1200px;
+margin: 20px auto;
+padding: 0 20px;
+}
+::placeholder {
+color: var(--dark-text-secondary);
+}
+
+/* --- Light Theme Overrides --- */
+body.light-theme {
+background-image: var(--light-bg-body);
+color: var(--light-text-primary);
+}
+body.light-theme .navbar { background-color: var(--light-bg-navbar); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+body.light-theme .logo { color: var(--light-text-primary); }
+body.light-theme .breadcrumbs { background-color: #f7f7f7; border-color: var(--light-border-light); }
+body.light-theme .breadcrumbs li { color: var(--light-text-secondary); }
+body.light-theme .breadcrumbs a { color: var(--light-text-primary); }
+body.light-theme .link-card { background-color: var(--light-bg-card); border-color: var(--light-border-card); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+/* Light theme overlay and button text */
+body.light-theme .card-content-overlay {
+background-image: linear-gradient(to top, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7));
+border-top: 1px solid rgba(0,0,0,0.1);
+}
+body.light-theme .card-title { color: var(--light-text-primary); }
+body.light-theme .card-subtitle { color: var(--light-text-secondary); }
+body.light-theme .delete-btn { background: var(--light-delete-bg); color: var(--light-delete-text); }
+body.light-theme .delete-btn:hover { background: var(--light-delete-bg-hover); color: var(--light-delete-text-hover); }
+body.light-theme .admin-form-container { background-color: var(--light-bg-modal); border-color: var(--light-border-light); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+body.light-theme .admin-form-container h2 { color: var(--light-text-primary); }
+body.light-theme .admin-form-container label { color: var(--light-text-secondary); }
+body.light-theme .admin-form-container input { background-color: #f9fafb; border-color: var(--light-border-light); color: var(--light-text-primary); }
+body.light-theme .admin-form-container ::placeholder { color: var(--light-text-secondary); }
+body.light-theme .footer { color: var(--light-footer-text); border-top-color: var(--light-border-light); }
+
+
+/* --- Navbar --- */
+.navbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 30px;
+background-color: var(--dark-bg-navbar);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+transition: background-color 0.5s ease, box-shadow 0.5s ease;
+flex-shrink: 0; /* Prevent navbar from shrinking */
+}
+.navbar-controls {
+display: flex;
+gap: 15px;
+align-items: center;
+}
+.logo {
+font-family: var(--font-logo);
+font-size: 1.5rem;
+font-weight: 700;
+color: var(--dark-text-primary);
+transition: color 0.5s ease;
+}
+.add-button { /* Renamed from .login-button for clarity */
+background-image: linear-gradient(to right, var(--grad-1) 0%, var(--grad-2) 50%, var(--grad-3) 100%);
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 8px;
+cursor: pointer;
+font-size: 0.9rem;
+font-weight: 600;
+text-decoration: none;
+transition: all 0.4s ease;
+background-size: 200% auto;
+display: flex;
+align-items: center;
+gap: 8px; /* Space between icon and text */
+}
+.add-button:hover {
+background-position: right center; /* change the direction of the change here */
+box-shadow: 0 4px 15px rgba(192, 38, 211, 0.3);
+}
+
+/* --- Dark/Light Mode Toggle --- */
+.theme-toggle {
+background: none;
+border: none;
+color: var(--dark-text-secondary);
+font-size: 1.3rem;
+cursor: pointer;
+padding: 5px;
+border-radius: 50%;
+transition: color 0.3s ease, background-color 0.3s ease;
+}
+.theme-toggle:hover {
+color: var(--dark-text-primary);
+background-color: rgba(255, 255, 255, 0.1);
+}
+body.light-theme .theme-toggle {
+color: var(--light-text-secondary);
+}
+body.light-theme .theme-toggle:hover {
+color: var(--light-text-primary);
+background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* --- Breadcrumbs --- */
+.breadcrumbs {
+padding: 12px 30px;
+border-bottom: 1px solid var(--dark-border-light);
+transition: background-color 0.5s ease, border-color 0.5s ease;
+flex-shrink: 0; /* Prevent breadcrumbs from shrinking */
+}
+.breadcrumbs ul {
+margin: 0;
+padding: 0;
+list-style: none;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.breadcrumbs li {
+font-size: 0.9rem;
+color: var(--dark-text-secondary);
+transition: color 0.5s ease;
+}
+.breadcrumbs li:not(:last-child)::after {
+content: '/';
+margin-left: 8px;
+color: var(--dark-text-secondary);
+}
+.breadcrumbs a {
+color: var(--dark-text-primary);
+text-decoration: none;
+font-weight: 500;
+transition: color 0.5s ease;
+}
+.breadcrumbs a:hover {
+text-decoration: underline;
+}
+
+/* --- Main Content Area --- */
+/* This will make the main content area (public page, admin page) fill the remaining space */
+#public-page, #admin-page {
+flex-grow: 1;
+}
+
+/* --- Link Cards (Public Page) --- */
+.links-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 20px;
+justify-content: center;
+}
+.link-card {
+background-color: var(--dark-bg-card); /* Fallback, overridden by JS gradient */
+border-radius: 12px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+position: relative;
+height: 200px; /* Adjusted height for the new layout */
+overflow: hidden;
+display: flex;
+align-items: flex-end; /* Align content to bottom */
+border: 1px solid var(--dark-border-card);
+transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.5s ease, border-color 0.5s ease;
+}
+.link-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Inner Content area for text and button */
+.card-content-overlay {
+position: absolute;
+top: 0; /* Starts from top now */
+left: 0;
+right: 0;
+bottom: 0; /* Takes up full height */
+/* Gradient glass */
+background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.4));
+backdrop-filter: blur(10px) saturate(150%);
+-webkit-backdrop-filter: blur(10px) saturate(150%);
+padding: 16px;
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+display: flex;
+flex-direction: column; /* Stack items vertically */
+justify-content: flex-end; /* Push content to the bottom */
+gap: 12px;
+z-index: 2; /* Above the color background */
+transition: background-image 0.5s ease, border-color 0.5s ease;
+}
+
+.card-header-actions {
+position: absolute; /* Position at top-right */
+top: 16px;
+right: 16px; /* Moved to right */
+display: flex;
+width: auto; /* No longer full width */
+}
+.card-info {
+flex-grow: 1; /* Allows it to take available space */
+min-width: 0; /* Prevents text overflow issues */
+margin-top: auto; /* Pushes card info and button to bottom */
+}
+.card-title {
+font-family: var(--font-heading);
+font-size: 1.2rem; /* Slightly larger for style */
+font-weight: 700;
+margin: 0;
+margin-bottom: 4px;
+color: var(--dark-text-primary);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: color 0.5s ease;
+}
+.card-subtitle {
+font-size: 0.9rem;
+color: var(--dark-text-secondary);
+margin: 0;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: color 0.5s ease;
+}
+
+/* --- VIEW Button --- */
+.view-btn {
+color: #ffffff; /* Set text to white for contrast */
+border: 1px solid transparent; /* Base border */
+padding: 8px 16px;
+border-radius: 20px; /* Pill shape */
+font-size: 0.9rem;
+font-weight: 600;
+text-decoration: none;
+cursor: pointer;
+transition: filter 0.2s ease, box-shadow 0.2s ease;
+display: flex;
+align-items: center;
+justify-content: center; /* Center icon and text */
+gap: 6px;
+flex-shrink: 0; /* Prevent button from shrinking */
+width: 100px; /* Fixed width to match reference */
+margin-top: 15px; /* Space between info and button */
+align-self: flex-end; /* Push button to the right within the flex column */
+}
+.view-btn:hover {
+filter: brightness(1.15); /* Brighten the color on hover */
+box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* --- Delete Button Specific Styles --- */
+.delete-btn {
+background: var(--dark-delete-bg);
+border: none;
+color: var(--dark-delete-text);
+font-size: 1.1rem; /* Larger icon */
+cursor: pointer;
+width: 44px; /* Larger button */
+height: 44px;
+border-radius: 50%;
+transition: background-color 0.2s, color 0.2s;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0; /* Prevent shrinking */
+}
+.delete-btn:hover {
+background: var(--dark-delete-bg-hover);
+color: var(--dark-delete-text-hover);
+}
+
+/* --- Admin Form Page --- */
+.admin-form-container {
+max-width: 600px;
+margin: 40px auto;
+padding: 30px;
+background-color: var(--dark-bg-modal);
+border-radius: 8px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+border: 1px solid var(--dark-border-light);
+transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+}
+.admin-form-container h2 {
+font-family: var(--font-heading);
+font-weight: 700;
+text-align: center;
+margin-top: 0;
+color: var(--dark-text-primary);
+transition: color 0.5s ease;
+}
+.form-group {
+margin-bottom: 20px;
+}
+.form-group label {
+display: block;
+margin-bottom: 8px;
+font-weight: 500;
+color: var(--dark-text-secondary);
+transition: color 0.5s ease;
+}
+.form-group input {
+width: 100%;
+padding: 12px;
+border: 1px solid var(--dark-border-light);
+background-color: #111827; /* Darker input bg */
+border-radius: 5px;
+box-sizing: border-box;
+font-size: 1rem;
+font-family: var(--font-body);
+color: var(--dark-text-primary);
+transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
+}
+.admin-form-container button[type="submit"] {
+width: 100%;
+padding: 12px;
+font-size: 1.1rem;
+font-weight: 600;
+background-image: linear-gradient(to right, var(--grad-1) 0%, var(--grad-2) 50%, var(--grad-3) 100%);
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+transition: all 0.4s ease;
+background-size: 200% auto;
+}
+.admin-form-container button[type="submit"]:hover {
+background-position: right center;
+box-shadow: 0 4px 15px rgba(192, 38, 211, 0.3);
+}
+
+/* --- Footer --- */
+.footer {
+text-align: center;
+padding: 24px 30px;
+margin-top: auto; /* Pushes footer to bottom */
+color: var(--dark-footer-text);
+font-size: 0.9rem;
+border-top: 1px solid var(--dark-border-light);
+transition: color 0.5s ease, border-color 0.5s ease;
+flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+/* --- Mobile Responsive Adjustments --- */
+@media (max-width: 600px) {
+.navbar {
+padding: 15px 20px; /* Reduce horizontal padding */
+flex-direction: column; /* Stack logo and controls */
+gap: 15px; /* Add gap between stacked items */
+}
+
+.breadcrumbs {
+padding: 12px 20px; /* Reduce horizontal padding */
+}
+
+.container {
+padding: 0 15px; /* Reduce container padding */
+margin: 15px auto; /* Reduce top/bottom margin */
+}
+
+.link-card {
+height: 190px; /* Slightly shorter for mobile */
+}
+
+.card-title {
+font-size: 1.1rem; /* Slightly smaller title */
+}
+
+.card-subtitle {
+font-size: 0.85rem; /* Slightly smaller subtitle */
+}
+
+.card-header-actions {
+top: 12px;
+right: 12px;
+}
+
+.delete-btn {
+width: 40px; /* Slightly smaller button */
+height: 40px;
+font-size: 1rem;
+}
+
+.view-btn {
+width: 90px; /* Slightly smaller button */
+font-size: 0.85rem;
+padding: 8px 14px;
+}
+}
+</style>
+</head>
+<body>
+
+<!-- Top Navigation --><nav class="navbar">
+<div class="logo">MyLinks</div>
+<div class="navbar-controls">
+<button id="theme-toggle" class="theme-toggle">
+<i class="fas fa-sun"></i> <!-- Sun icon for light mode --></button>
+<button id="add-btn" class="add-button"> <!-- Changed class to add-button --><i class="fas fa-plus"></i> Add
+</button>
+</div>
+</nav>
+
+<!-- Breadcrumbs Navigation --><nav class="breadcrumbs" aria-label="Breadcrumb">
+<ul id="breadcrumb-list">
+<li><a href="#">MyLinks</a></li>
+<!-- Admin crumb will be added here by JS --></ul>
+</nav>
+
+<!-- Public Page Content --><div id="public-page">
+<main class="container">
+<div id="links-container" class="links-grid">
+<p>Loading links...</p>
+</div>
+</main>
+</div>
+
+<!-- Admin Page Content (Hidden by default) --><div id="admin-page" style="display: none;">
+<main class="container">
+<div class="admin-form-container">
+<h2>Add New Link</h2>
+<form id="add-link-form">
+<div class="form-group">
+<label for="link-name">Name</label>
+<input type="text" id="link-name" placeholder="e.g., KULLIYYA CONCEPT NOTE" required>
+</div>
+<div class="form-group">
+<label for="link-category">Category</label>
+<input type="text" id="link-category" placeholder="e.g., OFFICIALS" required>
+</div>
+<div class="form-group">
+<label for="link-url">Website Link (URL)</label>
+<input type="url" id="link-url" placeholder="https://..." required>
+</div>
+<div class="form-group">
+<label for="link-color">Card Background Color Code (e.g., #00695C)</label>
+<input type="text" id="link-color" placeholder="#005249" value="#005249" required>
+</div>
+<button type="submit" id="submit-btn">Add Link</button>
+</form>
+</div>
+</main>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+© copyright by dezign.mvs
+</footer>
+
+<!-- Javascript (uses latest Firebase Modular SDK) --><script type="module">
+// --- Firebase Imports ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+
+// --- Firebase Config ---
+const firebaseConfig = {
+apiKey: "AIzaSyBquWSZVVwJITsN_H943-Fx2Z9uf-V9JQQ",
+authDomain: "suuu-5293b.firebaseapp.com",
+projectId: "suuu-5293b",
+storageBucket: "suuu-5293b.appspot.com",
+messagingSenderId: "1004581080357",
+appId: "1:1004581080357:web:c84ebb279776ad171e1ecc",
+measurementId: "G-KSWY1KL4BS"
+};
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+try { setLogLevel('debug'); } catch (e) {}
+
+// --- DOM Elements ---
+const body = document.body;
+const publicPage = document.getElementById('public-page');
+const adminPage = document.getElementById('admin-page');
+const navLogo = document.querySelector('.navbar .logo');
+const addBtn = document.getElementById('add-btn'); // Changed from loginBtn
+const themeToggleBtn = document.getElementById('theme-toggle');
+const linksContainer = document.getElementById('links-container');
+const addLinkForm = document.getElementById('add-link-form');
+const linkName = document.getElementById('link-name');
+const linkCategory = document.getElementById('link-category');
+const linkUrl = document.getElementById('link-url');
+const linkColorInput = document.getElementById('link-color');
+const submitBtn = document.getElementById('submit-btn');
+const breadcrumbList = document.getElementById('breadcrumb-list');
+
+// --- Utility to darken hex color ---
+function darkenColor(hex, percent) {
+let f=parseInt(hex.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=(f>>8)&0x00ff,B=f&0x0000ff;
+return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+}
+
+// --- Theme Toggle Logic ---
+function applyTheme(isLight) {
+if (isLight) {
+body.classList.add('light-theme');
+themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>'; // Moon icon for dark mode
+} else {
+body.classList.remove('light-theme');
+themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon for light mode
+}
+localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+themeToggleBtn.addEventListener('click', () => {
+const currentTheme = localStorage.getItem('theme') || 'dark';
+applyTheme(currentTheme === 'dark'); // Toggle to opposite theme
+});
+
+// Apply theme from local storage on load
+document.addEventListener('DOMContentLoaded', () => {
+const savedTheme = localStorage.getItem('theme');
+applyTheme(savedTheme === 'light');
+});
+
+// --- Admin Page Toggle Logic ---
+addBtn.addEventListener('click', () => {
+publicPage.style.display = 'none';
+adminPage.style.display = 'block';
+navLogo.textContent = 'Admin Panel';
+
+// Change "Add" button to "Back to Home"
+const backToHomeBtn = document.createElement('button');
+backToHomeBtn.className = 'add-button'; // Keep the same button class
+backToHomeBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Home';
+backToHomeBtn.addEventListener('click', (event) => {
+event.preventDefault();
+publicPage.style.display = 'block';
+adminPage.style.display = 'none';
+navLogo.textContent = 'MyLinks';
+backToHomeBtn.replaceWith(addBtn); // Replace with original add button
+// Remove admin crumb
+const adminCrumb = document.querySelector('#breadcrumb-list li:last-child');
+if (adminCrumb && adminCrumb.textContent === 'Admin Panel') {
+adminCrumb.remove();
+}
+fetchAndDisplayLinks(); // Refresh public links
+});
+addBtn.replaceWith(backToHomeBtn);
+
+// --- Update Breadcrumbs ---
+const adminCrumb = document.createElement('li');
+adminCrumb.textContent = 'Admin Panel';
+breadcrumbList.appendChild(adminCrumb);
+});
+
+// --- Delete Link Function ---
+async function deleteLink(linkId) {
+if (confirm("Are you sure you want to delete this link? This action cannot be undone.")) {
+try {
+await deleteDoc(doc(db, "links", linkId));
+alert('Link deleted successfully!');
+fetchAndDisplayLinks(); // Refresh list after deletion
+} catch (error) {
+console.error("Error deleting document: ", error);
+alert('Error deleting link. Please check the console for details.');
+}
+}
+}
+
+// --- Fetch Links ---
+async function fetchAndDisplayLinks() {
+if (!db) {
+linksContainer.innerHTML = "<p>Error: Database not initialized.</p>";
+return;
+}
+try {
+const querySnapshot = await getDocs(collection(db, "links"));
+if (querySnapshot.empty) {
+linksContainer.innerHTML = "<p>No links found. Add some in the admin panel!</p>";
+return;
+}
+linksContainer.innerHTML = "";
+querySnapshot.forEach((doc) => {
+const link = doc.data();
+const linkId = doc.id;
+const primaryColor = link.colorCode || '#005249'; // Default from your palette
+const gradientColor = darkenColor(primaryColor, -0.15); // Slightly darken for gradient end
+
+const cardHTML = `
+<div class="link-card" style="background-image: linear-gradient(to bottom right, ${primaryColor}, ${gradientColor});">
+<!-- Glassmorphism overlay --><div class="card-content-overlay">
+<div class="card-header-actions">
+<!-- Delete button moved to top-right --><button class="delete-btn" data-id="${linkId}">
+<i class="fas fa-trash-alt"></i>
+</button>
+</div>
+
+<div class="card-info">
+<h3 class="card-title">${link.name}</h3>
+<p class="card-subtitle">${link.category || '&nbsp;'}</p>
+</div>
+<a href="${link.url}"
+class="view-btn"
+target="_blank"
+rel="noopener noreferrer"
+style="background-color: ${primaryColor};">
+<i class="fas fa-mouse-pointer"></i>
+VIEW
+</a>
+</div>
+</div>
+`;
+linksContainer.innerHTML += cardHTML;
+});
+
+// Attach event listeners for delete buttons (always)
+document.querySelectorAll('.delete-btn').forEach(button => {
+button.addEventListener('click', (event) => {
+event.stopPropagation(); // Prevent card click
+const idToDelete = event.currentTarget.dataset.id;
+deleteLink(idToDelete);
+});
+});
+
+} catch (error) {
+console.error("Error fetching links: ", error);
+linksContainer.innerHTML = "<p>Error loading links. Please check the console.</p>";
+}
+}
+
+// --- Add Link Handler ---
+addLinkForm.addEventListener('submit', async (e) => {
+e.preventDefault();
+const name = linkName.value;
+const category = linkCategory.value;
+const url = linkUrl.value;
+const colorCode = linkColorInput.value; // Get color code
+submitBtn.disabled = true;
+submitBtn.textContent = 'Adding...';
+try {
+await addDoc(collection(db, "links"), {
+name: name,
+category: category,
+url: url,
+colorCode: colorCode // Save color code
+});
+alert('Link added successfully!');
+addLinkForm.reset();
+linkColorInput.value = '#005249'; // Reset default color to one from palette
+fetchAndDisplayLinks(); // Refresh list on public page
+} catch (error) {
+console.error("Error adding document: ", error);
+alert('Error adding link. Please check the console for details.');
+} finally {
+submitBtn.disabled = false;
+submitBtn.textContent = 'Add Link';
+}
+});
+
+// --- Authentication then Data Fetch ---
+async function initializeAndFetch() {
+try {
+await signInAnonymously(auth);
+await fetchAndDisplayLinks();
+} catch (error) {
+console.error("Error initializing Firebase: ", error);
+linksContainer.innerHTML = `<p>Error connecting to service: ${error.message}. Please check console and ensure Firestore rules are configured.</p>`;
+}
+}
+initializeAndFetch();
+</script>
+</body>
+</html>
+
