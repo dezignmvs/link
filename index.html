@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Dashboard</title>
+    <title>MyLinks Dashboard</title>
     <!-- Font Awesome for icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Removed Inter Font Link -->
 
@@ -106,14 +106,19 @@
             color: var(--dark-text-secondary);
         }
         body.dark-theme .sidebar-nav a:hover,
-        body.dark-theme .sidebar-nav li.active a {
-            background-color: rgba(255, 255, 255, 0.08); /* Lighter hover/active for dark mode */
+        body.dark-theme .sidebar-nav li:not(.active) a:hover .sidebar-category-color {
+             background-color: rgba(255, 255, 255, 0.08); /* Lighter hover for dark mode */
             color: var(--dark-text-primary);
         }
         body.dark-theme .sidebar-nav li.active a {
-             box-shadow: none; /* Modernize doesn't use strong shadows on sidebar active */
-             background-image: none; /* Ensure gradient removed */
+             box-shadow: none;
+             background-image: none;
+             background-color: rgba(255, 255, 255, 0.08); /* Consistent active background */
+             color: var(--dark-text-primary);
         }
+         body.dark-theme .sidebar-nav li.active .sidebar-category-color {
+             background-color: #fff; /* White indicator for active dark mode */
+         }
         body.dark-theme .sidebar-toggle-desktop { /* Adjusted */
             color: var(--dark-text-secondary);
         }
@@ -140,6 +145,18 @@
         body.dark-theme .header-icon-button:hover {
             background-color: #374151;
         }
+        /* Dark mode for back-btn and customize-btn */
+        body.dark-theme .back-btn,
+        body.dark-theme .customize-btn {
+            background-color: #2A3142;
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .back-btn:hover,
+        body.dark-theme .customize-btn:hover {
+            background-color: #374151;
+            color: var(--dark-text-primary);
+        }
+
         body.dark-theme .app-breadcrumbs {
             background-color: #1a222f; /* Slightly lighter than body for contrast */
             border-bottom-color: var(--dark-border);
@@ -246,7 +263,7 @@
 
 
         /* --- Sidebar (app-sidebar) --- */
-        .app-sidebar { width: var(--sidebar-width-full); background-color: var(--light-bg-sidebar); border-right: 1px solid var(--light-border); flex-shrink: 0; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; transition: width 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; box-shadow: 0 2px 10px var(--light-shadow); }
+        .app-sidebar { width: var(--sidebar-width-full); background-color: var(--light-bg-sidebar); border-right: 1px solid var(--light-border); flex-shrink: 0; height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; transition: width 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease-in-out; box-shadow: 0 2px 10px var(--light-shadow); } /* Added transform */
         .sidebar-logo { font-size: 1.5rem; font-weight: 700; color: var(--light-text-primary); padding: 24px 30px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; overflow: hidden; position: relative; }
         .sidebar-logo-content { display: flex; align-items: center; gap: 10px; overflow: hidden; flex-grow: 1; }
         .sidebar-logo .fa-layer-group { color: var(--accent-blue); font-size: 1.8rem; }
@@ -254,25 +271,50 @@
         .sidebar-toggle-desktop { background: none; border: none; color: var(--light-text-secondary); padding: 5px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 36px; height: 36px; flex-shrink: 0; transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease; }
         .sidebar-toggle-desktop .fa-fw { transition: transform 0.3s ease; } /* Add transition for icon */
         .sidebar-toggle-desktop:hover { color: var(--light-text-primary); background-color: #F0F2F5; }
-        body.dark-theme .sidebar-toggle-desktop { color: var(--dark-text-secondary); }
-        body.dark-theme .sidebar-toggle-desktop:hover { color: var(--dark-text-primary); background-color: rgba(255, 255, 255, 0.08); }
         .app-sidebar.mini .sidebar-toggle-desktop .fa-fw { transform: rotate(180deg); } /* Rotate icon when mini */
         .sidebar-nav-container { padding: 0 20px; overflow-y: auto; flex-grow: 1; padding-bottom: 20px; }
         .sidebar-nav-title { font-size: 0.75rem; font-weight: 600; color: var(--light-text-secondary); text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 10px; margin-top: 15px; white-space: nowrap; overflow: hidden; transition: opacity 0.2s ease; }
         .sidebar-nav { list-style: none; padding: 0; margin: 0; }
-        .sidebar-nav li a { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 500; color: var(--light-text-secondary); transition: background 0.2s ease, color 0.2s ease; white-space: nowrap; overflow: hidden; font-size: 0.9rem; }
+        .sidebar-nav li a { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 500; color: var(--light-text-secondary); transition: background 0.2s ease, color 0.2s ease; white-space: nowrap; overflow: hidden; font-size: 0.9rem; position: relative; /* Needed for color indicator */ }
         .sidebar-nav li a:hover { background-color: #F0F2F5; color: var(--light-text-primary); }
         .sidebar-nav li.active a { background: linear-gradient(to right, #60A5FA, #3B82F6); color: #FFFFFF; box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3); }
         .sidebar-nav li a .fa-fw { width: 1.25em; text-align: center; flex-shrink: 0; font-size: 1.1rem; }
         .sidebar-nav li.active a .fa-fw { color: #FFFFFF; }
+        /* Style for the category color indicator */
+        .sidebar-category-color {
+            width: 6px; /* Width of the color bar */
+            height: 20px; /* Height matching icon */
+            border-radius: 3px;
+            margin-right: 8px; /* Space between indicator and icon */
+            flex-shrink: 0;
+            transition: background-color 0.2s ease;
+        }
+        .app-sidebar.mini .sidebar-category-color {
+            width: 20px; /* Make it a square when mini */
+            height: 6px;
+            margin-right: 0;
+            margin-bottom: 4px; /* Space below indicator */
+        }
+        /* Hide text span in mini sidebar (already handled) */
+        /* Adjustments for mini sidebar to accommodate indicator */
+        .app-sidebar.mini .sidebar-nav li a {
+            flex-direction: column; /* Stack indicator and icon vertically */
+            justify-content: center;
+            align-items: center;
+            padding: 10px 5px; /* Adjust padding */
+        }
+        .app-sidebar.mini .sidebar-nav li a .fa-fw {
+            margin-top: 4px; /* Space between indicator and icon */
+        }
+
         .app-sidebar.mini { width: var(--sidebar-width-mini); }
         .app-sidebar.mini .sidebar-logo { padding-left: 0; padding-right: 0; justify-content: center; }
         .app-sidebar.mini .sidebar-logo-content { width: 0; opacity: 0; visibility: hidden; }
         .app-sidebar.mini .sidebar-logo-text { opacity: 0; width: 0; visibility: hidden; }
         .app-sidebar.mini .sidebar-nav-container { padding: 0 10px; }
         .app-sidebar.mini .sidebar-nav-title { opacity: 0; height: 0; padding: 0; margin: 0; }
-        .app-sidebar.mini .sidebar-nav li a { justify-content: center; }
-        .app-sidebar.mini .sidebar-nav li a span { opacity: 0; width: 0; visibility: hidden; }
+        /* .app-sidebar.mini .sidebar-nav li a { justify-content: center; } */ /* Handled above */
+        .app-sidebar.mini .sidebar-nav li a span:not(.sidebar-category-color) { opacity: 0; width: 0; visibility: hidden; height: 0; }
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 998; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s 0.3s; }
         .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s 0s; }
 
@@ -282,6 +324,8 @@
         .header-left { display: flex; align-items: center; gap: 20px; flex-grow: 1; }
         .header-controls { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
         .mobile-sidebar-toggle { background: none; border: none; color: var(--light-text-secondary); font-size: 1.3rem; cursor: pointer; padding: 8px; border-radius: 50%; transition: color 0.3s ease, background-color 0.3s ease, transform 0.1s ease; display: none; }
+        .mobile-sidebar-toggle i { transition: transform 0.3s ease; } /* Add transition for icon rotation */
+        .mobile-sidebar-toggle.active i { transform: rotate(90deg); } /* Rotate icon when active */
         .mobile-sidebar-toggle:hover { background-color: #F0F2F5; color: var(--light-text-primary); }
         body.dark-theme .mobile-sidebar-toggle { color: var(--dark-text-secondary); }
         body.dark-theme .mobile-sidebar-toggle:hover { background-color: #374151; color: var(--dark-text-primary); }
@@ -320,12 +364,34 @@
         
         /* --- Admin Form Page --- */
         .admin-form-container { max-width: 600px; margin: 40px auto; padding: 30px; background-color: var(--light-bg-card); border-radius: 8px; box-shadow: 0 4px 12px var(--light-shadow); border: 1px solid var(--light-border); transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
-        .admin-form-container h2 { font-family: var(--font-main); font-weight: 700; text-align: center; margin-top: 0; margin-bottom: 30px; color: var(--light-text-primary); }
-        .admin-form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; } /* New header for title and customize button */
-        .customize-btn { background-color: #F0F2F5; color: var(--light-text-secondary); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: background-color 0.2s, color 0.2s, transform 0.1s ease; }
+        .admin-form-container h2 { font-family: var(--font-main); font-weight: 700; text-align: center; margin-top: 0; margin-bottom: 0; /* Adjusted */ flex-grow: 1; /* Allow title to take space */ }
+        .admin-form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 15px; } /* New header for title and customize button */
+        
+        /* New Back Button Style */
+        .back-btn {
+            background-color: #F0F2F5;
+            color: var(--light-text-secondary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        .back-btn:hover {
+            background-color: #E5E7EB;
+            color: var(--light-text-primary);
+        }
+
+        .customize-btn { background-color: #F0F2F5; color: var(--light-text-secondary); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: background-color 0.2s, color 0.2s, transform 0.1s ease; flex-shrink: 0; /* Prevent shrinking */ }
         .customize-btn:hover { background-color: #E5E7EB; color: var(--light-text-primary); }
-        body.dark-theme .customize-btn { background-color: #2A3142; color: var(--dark-text-secondary); }
-        body.dark-theme .customize-btn:hover { background-color: #374151; color: var(--dark-text-primary); }
+        .customize-btn span { transition: display 0s; } /* Hide text immediately */
+
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--light-text-secondary); font-size: 0.9rem; }
         /* Style for the color picker input */
@@ -427,7 +493,8 @@
         .category-table .actions button:active,
         .customize-btn:active,
         .delete-btn:active,
-        .modal-close-btn:active {
+        .modal-close-btn:active,
+        .back-btn:active {
             transform: scale(0.96);
             transition-duration: 0.05s; /* Faster reaction for active state */
         }
@@ -435,7 +502,7 @@
 
         /* --- Mobile Responsive Adjustments --- */
         @media (max-width: 992px) { /* Tablet breakpoint */
-            .app-sidebar { position: fixed; left: 0; top: 0; height: 100%; z-index: 1000; transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
+            .app-sidebar { position: fixed; left: 0; top: 0; height: 100%; z-index: 1000; transform: translateX(-100%); } /* Keep transform */
             .app-sidebar.active { transform: translateX(0); }
             /* sidebar-overlay styles updated above for smoother transition */
             .mobile-sidebar-toggle { display: block; }
@@ -458,33 +525,50 @@
             .view-btn { font-size: 0.85rem; padding: 7px 12px; }
             .modal { width: 95%; max-width: 95%; } /* Make modals wider on mobile */
         }
-        @media (max-width: 576px) { /* Smaller mobile screens */
-            .app-header { 
-                flex-wrap: wrap; 
-                justify-content: space-between; /* Align items to ends */
-                padding: 10px 15px; /* Reduced padding */
-                gap: 10px; /* Reduced gap */
-            }
-            .header-left { 
-                width: auto; /* Don't make it full width */
-                justify-content: flex-start; /* Align toggle to start */
-                margin-bottom: 0; /* Remove margin */
-                flex-grow: 0; /* Don't let it grow excessively */
-            }
-             .header-controls { 
-                width: auto; /* Don't make it full width */
-                justify-content: flex-end; /* Align icons to end */
-                gap: 8px; /* Further reduce gap */
-            }
-            .search-bar { 
-                width: 100%; 
-                order: 3; /* Put search bar last */
-                margin-top: 10px; /* Space above search bar */
-            }
-           
+        @media (max-width: 576px) { /* Smaller mobile screens - One Row Header */
+             .app-header {
+                 flex-wrap: nowrap; /* Prevent wrapping */
+                 padding: 10px 15px;
+                 gap: 10px;
+             }
+             .header-left {
+                 flex-grow: 1; /* Allow search to take available space */
+                 width: auto;
+                 margin-bottom: 0;
+                 gap: 10px; /* Space between toggle and search */
+             }
+             .search-bar {
+                 order: 0; /* Keep search bar in its natural order */
+                 margin-top: 0;
+                 width: auto; /* Let it shrink/grow */
+                 flex: 1 1 auto; /* Allow shrinking and growing */
+                 min-width: 100px; /* Minimum width before shrinking too much */
+             }
+             .header-controls {
+                 width: auto;
+                 flex-shrink: 0; /* Prevent controls from shrinking */
+                 gap: 8px;
+             }
             .app-main-content { padding: 10px; }
             .dashboard-grid { padding: 10px; gap: 15px; }
             .admin-form-container { margin: 20px 10px; padding: 20px; }
+            .admin-form-header { flex-wrap: wrap; } /* Allow wrap if needed */
+            .admin-form-header h2 { text-align: left; margin-bottom: 10px; width: 100%; order: -1; } /* Title first on mobile */
+            .back-btn { order: -2; } /* Back button very first */
+            
+            /* Customize Button: Icon-only on mobile */
+            .customize-btn {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                padding: 0;
+                font-size: 1.1rem;
+                justify-content: center;
+            }
+            .customize-btn span {
+                display: none; /* Hide text */
+            }
+
             .modal-header h2 { font-size: 1.1rem; }
             .modal { padding: 20px; }
             .modal-actions { flex-direction: column; gap: 8px; }
@@ -512,7 +596,8 @@
             <div class="sidebar-nav-title">Navigation</div>
             <ul class="sidebar-nav" id="sidebar-nav">
                 <!-- All Links -->
-                <li class="active"><a href="#" data-category="All">
+                <li><a href="#" data-category="All"> <!-- Removed active class initially -->
+                     <!-- No color indicator for 'All Links' -->
                     <i class="fas fa-fw fa-border-all"></i> <span>All Links</span>
                 </a></li>
                 <!-- Categories will be populated by JS -->
@@ -574,9 +659,13 @@
                 <div class="admin-form-container">
                      <!-- New Header with Customize Button -->
                     <div class="admin-form-header">
+                        <!-- New Back Button -->
+                        <button id="back-to-public-btn" class="back-btn" title="Back">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
                         <h2>Add New Link</h2>
                         <button id="customize-categories-btn" class="customize-btn">
-                            <i class="fas fa-cog"></i> Customize Categories
+                            <i class="fas fa-cog"></i> <span>Customize Categories</span>
                         </button>
                     </div>
                     <form id="add-link-form">
@@ -738,6 +827,7 @@
         const categoryEditIcon = document.getElementById('category-edit-icon');
         const categoryEditColor = document.getElementById('category-edit-color');
         const categorySaveBtn = document.getElementById('category-save-btn');
+        const backToPublicBtn = document.getElementById('back-to-public-btn'); // New Back Button
 
         let allLinksData = []; // Cache for links
         let allCategoriesData = []; // Cache for categories [{id, name, icon, color}]
@@ -780,10 +870,12 @@
         mobileSidebarToggle.addEventListener('click', () => {
             sidebar.classList.add('active');
             sidebarOverlay.classList.add('active');
+            mobileSidebarToggle.classList.add('active'); // Add active for icon rotation
         });
         sidebarOverlay.addEventListener('click', () => {
             sidebar.classList.remove('active');
             sidebarOverlay.classList.remove('active');
+            mobileSidebarToggle.classList.remove('active'); // Remove active for icon rotation
         });
         sidebarToggleDesktop.addEventListener('click', () => {
             sidebar.classList.toggle('mini');
@@ -818,6 +910,7 @@
             fetchAndDisplayLinks(currentCategory);
         }
         addBtn.addEventListener('click', showAdminPage);
+        backToPublicBtn.addEventListener('click', showPublicPage); // Add listener for new back button
         
         // --- Modal Handling ---
         function openModal(modalId) {
@@ -963,10 +1056,8 @@
                 }
 
                 // Refresh everything
-                await fetchAllData();
-                populateCategories();
-                populateCategoryTable();
-                fetchAndDisplayLinks(currentCategory); // Refresh main links view
+                await fetchAllData(); // Fetches and then calls populateCategories/fetchAndDisplayLinks
+                populateCategoryTable(); // Update modal table
                 closeModal('category-edit-modal');
 
             } catch (error) {
@@ -1012,19 +1103,16 @@
                 // Commit all changes
                 await batch.commit();
 
-                // Refresh UI
-                await fetchAllData();
-                populateCategories();
-                populateCategoryTable(); // Repopulate table in list modal
-                
                 // If the deleted category was the active one, switch to 'All'
-                if (currentCategory === category.name) {
+                const wasActive = currentCategory === category.name;
+                if (wasActive) {
                     currentCategory = 'All';
-                    // Set 'All Links' as active in sidebar
-                    document.querySelector('.sidebar-nav li.active')?.classList.remove('active');
-                    document.querySelector('.sidebar-nav li a[data-category="All"]')?.parentElement.classList.add('active');
                 }
-                fetchAndDisplayLinks(currentCategory); // Refresh main links view
+
+                // Refresh data and UI
+                await fetchAllData(); // Fetches and then calls populateCategories/fetchAndDisplayLinks
+                populateCategoryTable(); // Repopulate table in list modal
+
 
             } catch (error) {
                 console.error("Error deleting category: ", error);
@@ -1056,9 +1144,10 @@
         // --- Populate Categories (Sidebar & Admin Dropdown) ---
         function populateCategories() {
             // Clear existing categories (except "All Links")
-            const existingCategories = sidebarNav.querySelectorAll('li:not(:first-child)');
-            existingCategories.forEach(li => li.remove());
-            
+            const allLinksLi = sidebarNav.querySelector('li:first-child'); // Keep 'All Links'
+            sidebarNav.innerHTML = ''; // Clear all
+            sidebarNav.appendChild(allLinksLi); // Add 'All Links' back
+
             linkCategorySelect.innerHTML = '<option value="General">General</option>'; // Default option
 
             // Sort categories alphabetically
@@ -1067,15 +1156,11 @@
             allCategoriesData.forEach(cat => {
                 // Add to sidebar
                 const li = document.createElement('li');
+                // Added span for color indicator
                 li.innerHTML = `<a href="#" data-category="${cat.name}">
+                     <span class="sidebar-category-color" style="background-color: ${cat.color};"></span>
                     <i class="${cat.icon} fa-fw"></i> <span>${cat.name}</span>
                 </a>`;
-                 // Set active class if it matches currentCategory
-                if (cat.name === currentCategory) {
-                    // Remove active from 'All Links' if necessary
-                     document.querySelector('.sidebar-nav li.active')?.classList.remove('active');
-                    li.classList.add('active');
-                }
                 sidebarNav.appendChild(li);
 
                 // Add to admin dropdown
@@ -1085,10 +1170,16 @@
                 linkCategorySelect.appendChild(option);
             });
 
-            // Ensure 'All Links' is active if currentCategory is 'All'
-            if (currentCategory === 'All' && !document.querySelector('.sidebar-nav li.active')) {
-                 document.querySelector('.sidebar-nav li a[data-category="All"]')?.parentElement.classList.add('active');
-            }
+             // Set active class after populating all
+             document.querySelector('.sidebar-nav li.active')?.classList.remove('active'); // Clear previous active
+             const activeLink = document.querySelector(`.sidebar-nav li a[data-category="${currentCategory}"]`);
+             if (activeLink) {
+                 activeLink.parentElement.classList.add('active');
+             } else {
+                 // Fallback to 'All Links' if currentCategory somehow doesn't exist
+                 allLinksLi.classList.add('active');
+                 currentCategory = 'All';
+             }
         }
         
         // --- Sidebar Category Click Logic ---
@@ -1114,6 +1205,7 @@
                 if (sidebar.classList.contains('active')) {
                     sidebar.classList.remove('active');
                     sidebarOverlay.classList.remove('active');
+                    mobileSidebarToggle.classList.remove('active'); // De-activate icon
                 }
             }
         });
@@ -1126,9 +1218,18 @@
                 ? allLinksData
                 : allLinksData.filter(link => (link.category || 'General') === categoryFilter);
 
+            // Remove existing no-results message before potentially adding a new one
+            const existingNoResults = linksContainer.querySelector('.no-search-results');
+            if (existingNoResults) {
+                existingNoResults.remove();
+            }
+
             if (linksToDisplay.length === 0) {
-                 linksContainer.innerHTML = `<p class="no-search-results">No links found${categoryFilter === 'All' ? '' : ` in "${categoryFilter}"`}.</p>`;
-                return;
+                 // Check if the container is truly empty before adding the message
+                 if (linksContainer.children.length === 0) {
+                      linksContainer.innerHTML = `<p class="no-search-results">No links found${categoryFilter === 'All' ? '' : ` in "${categoryFilter}"`}.</p>`;
+                 }
+                return; // Return here if no links to display
             }
             
              // Sort links alphabetically by name within the category
@@ -1189,50 +1290,47 @@
         
         // --- Search Bar Logic ---
         function filterLinksBySearch() {
-            const searchTerm = searchInput.value.toLowerCase().trim(); // Trim whitespace
+            const searchTerm = searchInput.value.toLowerCase().trim();
             const allCards = linksContainer.querySelectorAll('.link-card');
             let visibleCount = 0;
-            const noResultsMsg = linksContainer.querySelector('.no-search-results'); // Get message element once
-
-             // Clear previous no results message if search term is empty and cards exist
-             if (searchTerm === '' && noResultsMsg) {
-                 noResultsMsg.style.display = 'none';
-             }
+            let noResultsMsg = linksContainer.querySelector('.no-search-results'); // Find existing message
 
             allCards.forEach(card => {
                 const name = card.dataset.name || '';
                 const category = card.dataset.category || '';
-                // Check if card belongs to the current category filter *before* searching
                 const inCurrentCategory = (currentCategory === 'All') || ((card.dataset.category || 'general') === currentCategory.toLowerCase());
-                
                 const matchesSearch = searchTerm === '' || name.includes(searchTerm) || category.includes(searchTerm);
-                
                 const isVisible = inCurrentCategory && matchesSearch;
-                
+
                 card.classList.toggle('hidden', !isVisible);
                 if (isVisible) {
                     visibleCount++;
                 }
             });
 
-            // Show/hide no results message based on search *within the current category*
-             if (visibleCount === 0 && linksContainer.children.length > 0) { // Check if cards were rendered at all
-                 const baseMsg = `No links found${currentCategory === 'All' ? '' : ` in "${currentCategory}"`}`;
-                 const searchMsg = searchTerm ? ` matching "${searchInput.value}"` : '';
+            // Manage the "no results" message
+            if (visibleCount === 0 && allCards.length > 0) { // Only show if cards exist but none match
+                const baseMsg = `No links found${currentCategory === 'All' ? '' : ` in "${currentCategory}"`}`;
+                const searchMsg = searchTerm ? ` matching "${searchInput.value}"` : '';
+                const fullMsg = `${baseMsg}${searchMsg}.`;
 
                 if (noResultsMsg) {
-                     noResultsMsg.textContent = baseMsg + searchMsg + '.';
-                    noResultsMsg.style.display = 'block';
-                 } else if (linksContainer.innerHTML.trim() === '') { // Only add if container is truly empty
-                     linksContainer.innerHTML = `<p class="no-search-results">${baseMsg}${searchMsg}.</p>`;
-                 } else if (!linksContainer.querySelector('.no-search-results')) { // Add if not present
-                     const p = document.createElement('p');
-                     p.className = 'no-search-results';
-                     p.textContent = baseMsg + searchMsg + '.';
-                     linksContainer.prepend(p); // Prepend to show at top
-                 }
-             } else if (noResultsMsg) {
-                 noResultsMsg.style.display = 'none'; // Hide if there are results
+                    noResultsMsg.textContent = fullMsg;
+                    noResultsMsg.style.display = 'block'; // Ensure it's visible
+                } else {
+                    // Create and prepend the message if it doesn't exist
+                    noResultsMsg = document.createElement('p');
+                    noResultsMsg.className = 'no-search-results';
+                    noResultsMsg.textContent = fullMsg;
+                    linksContainer.prepend(noResultsMsg);
+                }
+            } else if (noResultsMsg) {
+                // Hide the message if there are results or no cards at all
+                noResultsMsg.style.display = 'none';
+            }
+             // Handle the case where the links container might be empty initially (before fetch)
+             else if (visibleCount === 0 && allCards.length === 0 && linksContainer.innerHTML.trim() === '') {
+                  linksContainer.innerHTML = `<p class="no-search-results">No links found${currentCategory === 'All' ? '' : ` in "${currentCategory}"`}.</p>`;
              }
         }
         searchInput.addEventListener('input', filterLinksBySearch);
@@ -1240,7 +1338,9 @@
         
         // --- Fetch All Data (Main Loader) ---
         async function fetchAllData() {
-            linksContainer.innerHTML = '<p class="no-search-results">Loading links...</p>'; // Show loading state
+            if (!linksContainer.querySelector('.no-search-results')) {
+                linksContainer.innerHTML = '<p class="no-search-results">Loading links...</p>'; // Show loading only if not already there
+            }
             try {
                 // Fetch Categories first
                 const categorySnapshot = await getDocs(categoriesCollectionRef);
@@ -1251,7 +1351,7 @@
                 allLinksData = linksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 console.log("Data fetched:", { categories: allCategoriesData.length, links: allLinksData.length });
-                 // Ensure UI updates happen after data is ready
+                 // Update UI only after both fetches are complete
                 populateCategories(); 
                 fetchAndDisplayLinks(currentCategory); 
 
@@ -1271,7 +1371,6 @@
                 name: linkName.value.trim(),
                 category: linkCategorySelect.value || "General",
                 url: linkUrl.value.trim(),
-                // colorCode is no longer used, category color is used instead
             };
 
             // Basic validation
@@ -1303,8 +1402,8 @@
                 // Set the current category to the one just added
                 currentCategory = newLink.category;
                 
-                // Update sidebar active state
-                populateCategories(); // Repopulate to include active state correctly
+                // Update sidebar active state and dropdown
+                populateCategories(); 
                 
                 // Switch back to public page to see the new link
                 showPublicPage(); // This will also call fetchAndDisplayLinks from cache
