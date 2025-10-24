@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyLinks Dashboard</title>
+    <title>Dezign.mvs | Dashboard</title>
     <!-- Font Awesome for icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Fontshare Fonts -->
+    <!-- Removed Inter Font Link -->
+
     <style>
+        /* Import Fontshare Fonts (Satoshi & Nippo) */
         @import url('https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&f[]=nippo@700,500,400&display=swap');
 
         /* Modernize Dashboard Theme Colors & Variables */
         :root {
             /* Fonts */
-            --font-main: 'Satoshi', sans-serif;
-            --font-heading: 'Nippo', sans-serif;
+            --font-main: 'Satoshi', sans-serif; /* Changed to Satoshi */
+            --font-heading: 'Nippo', sans-serif; /* Changed to Nippo */
 
             /* Light Theme */
             --light-bg-body: #F8F9FB;
@@ -27,8 +29,8 @@
             --light-shadow: rgba(0, 0, 0, 0.05);
 
             /* Dark Theme */
-            --dark-bg-body: #111827;
-            --dark-bg-card: #1f2937;
+            --dark-bg-body: #111827; /* Main background, slightly lighter than components */
+            --dark-bg-card: #1f2937; /* Card, sidebar, header background */
             --dark-bg-sidebar: #1f2937;
             --dark-bg-header: #1f2937;
             --dark-bg-modal: #1f2937; /* Added for modals */
@@ -37,73 +39,196 @@
             --dark-border: #374151;
             --dark-shadow: rgba(0, 0, 0, 0.3);
 
-            /* Accent Colors */
-            --accent-purple: #8B5CF6;
-            --accent-orange: #FBBF24;
-            --accent-teal: #2DD4BF;
-            --accent-red: #EF4444;
-            --accent-green: #10B981;
-            --accent-blue: #60A5FA;
+            /* Accent Colors from Modernize Dashboard Cards */
+            --accent-purple: #8B5CF6; /* Employees */
+            --accent-orange: #FBBF24; /* Clients */
+            --accent-teal: #2DD4BF; /* Projects */
+            --accent-red: #EF4444;   /* Events */
+            --accent-green: #10B981; /* Payroll */
+            --accent-blue: #60A5FA;  /* Reports */
 
             /* Sidebar Sizes */
             --sidebar-width-full: 280px;
-            --sidebar-width-mini: 80px;
+            --sidebar-width-mini: 80px; /* Adjusted for cleaner icon-only view */
         }
 
         /* --- Base Layout & Typography --- */
         body {
-            font-family: var(--font-main);
+            font-family: var(--font-main); /* Apply Satoshi */
             margin: 0;
             background-color: var(--light-bg-body);
             color: var(--light-text-primary);
             min-height: 100vh;
-            display: flex;
+            display: flex; /* Sidebar layout */
             transition: background-color 0.3s ease, color 0.3s ease;
         }
-        h1, h2, h3, h4, h5, h6 { margin: 0; color: var(--light-text-primary); font-family: var(--font-heading); }
-        .sidebar-logo-text { font-family: var(--font-heading); }
-        ::placeholder { color: var(--light-text-secondary); opacity: 0.7; }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            color: var(--light-text-primary);
+            font-family: var(--font-heading); /* Apply Nippo */
+        }
+        .sidebar-logo-text { /* Target only the text part of the logo */
+             font-family: var(--font-heading); /* Nippo for logo text */
+        }
+
+        ::placeholder {
+            color: var(--light-text-secondary);
+            opacity: 0.7;
+        }
 
         /* --- Dark Theme Overrides --- */
-        body.dark-theme { background-color: var(--dark-bg-body); color: var(--dark-text-primary); }
-        body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, body.dark-theme h4, body.dark-theme h5, body.dark-theme h6 { color: var(--dark-text-primary); }
-        body.dark-theme ::placeholder { color: var(--dark-text-secondary); }
-        body.dark-theme .app-sidebar { background-color: var(--dark-bg-sidebar); border-right-color: var(--dark-border); }
-        body.dark-theme .sidebar-logo { color: var(--dark-text-primary); }
-        body.dark-theme .sidebar-nav a { color: var(--dark-text-secondary); }
-        body.dark-theme .sidebar-nav a:hover, body.dark-theme .sidebar-nav li.active a { background-color: rgba(255, 255, 255, 0.08); color: var(--dark-text-primary); }
-        body.dark-theme .sidebar-nav li.active a { box-shadow: none; }
-        body.dark-theme .sidebar-toggle-desktop { color: var(--dark-text-secondary); }
-        body.dark-theme .app-header { background-color: var(--dark-bg-header); border-bottom-color: var(--dark-border); }
-        body.dark-theme .search-bar input { background-color: #2A3142; border-color: #374151; color: var(--dark-text-primary); }
-        body.dark-theme .search-bar input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
-        body.dark-theme .search-bar .search-icon { color: var(--dark-text-secondary); }
-        body.dark-theme .header-icon-button { background-color: #2A3142; color: var(--dark-text-primary); }
-        body.dark-theme .header-icon-button:hover { background-color: #374151; }
-        body.dark-theme .app-breadcrumbs { background-color: #1a222f; border-bottom-color: var(--dark-border); }
-        body.dark-theme .app-breadcrumbs li { color: var(--dark-text-secondary); }
-        body.dark-theme .app-breadcrumbs a { color: var(--dark-text-primary); }
-        body.dark-theme .dashboard-grid .link-card { background-color: var(--dark-bg-card); border-color: var(--dark-border); box-shadow: 0 4px 12px var(--dark-shadow); }
-        body.dark-theme .link-card .card-content { background-color: var(--dark-bg-card); }
-        body.dark-theme .link-card .card-title { color: var(--dark-text-primary); }
-        body.dark-theme .link-card .card-subtitle { color: var(--dark-text-secondary); }
-        body.dark-theme .link-card .delete-btn { background-color: rgba(255, 255, 255, 0.1); color: var(--dark-text-primary); }
-        body.dark-theme .link-card .delete-btn:hover { background-color: var(--accent-red); color: #FFFFFF; }
-        body.dark-theme .admin-form-container { background-color: var(--dark-bg-card); border-color: var(--dark-border); box-shadow: 0 4px 12px var(--dark-shadow); }
-        body.dark-theme .admin-form-container h2 { color: var(--dark-text-primary); }
-        body.dark-theme .admin-form-container label { color: var(--dark-text-secondary); }
-        body.dark-theme .admin-form-container input, body.dark-theme .admin-form-container select, body.dark-theme input[type="color"] { background-color: #2A3142; border-color: #374151; color: var(--dark-text-primary); }
-        body.dark-theme input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-        body.dark-theme input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
-        body.dark-theme .admin-form-container ::placeholder { color: var(--dark-text-secondary); }
-        body.dark-theme .app-footer { color: var(--dark-text-secondary); border-top-color: var(--dark-border); }
-        body.dark-theme .modal { background-color: var(--dark-bg-modal); border: 1px solid var(--dark-border); }
-        body.dark-theme .modal h2 { color: var(--dark-text-primary); }
-        body.dark-theme .modal label { color: var(--dark-text-secondary); }
-        body.dark-theme .modal input, body.dark-theme .modal select { background-color: #2A3142; border-color: #374151; color: var(--dark-text-primary); }
-        body.dark-theme .modal table { border-color: var(--dark-border); }
-        body.dark-theme .modal th, body.dark-theme .modal td { border-color: var(--dark-border); }
-        body.dark-theme .modal th { background-color: #2A3142; }
+        body.dark-theme {
+            background-color: var(--dark-bg-body);
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme h1, body.dark-theme h2, body.dark-theme h3,
+        body.dark-theme h4, body.dark-theme h5, body.dark-theme h6 {
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme ::placeholder {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .app-sidebar {
+            background-color: var(--dark-bg-sidebar);
+            border-right-color: var(--dark-border);
+        }
+        body.dark-theme .sidebar-logo {
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .sidebar-nav a {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .sidebar-nav a:hover,
+        body.dark-theme .sidebar-nav li.active a {
+            background-color: rgba(255, 255, 255, 0.08); /* Lighter hover/active for dark mode */
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .sidebar-nav li.active a {
+             box-shadow: none; /* Modernize doesn't use strong shadows on sidebar active */
+        }
+        body.dark-theme .sidebar-toggle-desktop { /* Adjusted */
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .app-header {
+            background-color: var(--dark-bg-header);
+            border-bottom-color: var(--dark-border);
+        }
+        body.dark-theme .search-bar input {
+            background-color: #2A3142; /* Slightly darker than header for input */
+            border-color: #374151;
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .search-bar input:focus {
+            border-color: var(--accent-blue); /* Consistent focus color */
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+        body.dark-theme .search-bar .search-icon {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .header-icon-button {
+            background-color: #2A3142;
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .header-icon-button:hover {
+            background-color: #374151;
+        }
+        body.dark-theme .app-breadcrumbs {
+            background-color: #1a222f; /* Slightly lighter than body for contrast */
+            border-bottom-color: var(--dark-border);
+        }
+        body.dark-theme .app-breadcrumbs li {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .app-breadcrumbs a {
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .dashboard-grid .link-card {
+            background-color: var(--dark-bg-card);
+            border-color: var(--dark-border);
+            box-shadow: 0 4px 12px var(--dark-shadow);
+        }
+        body.dark-theme .link-card .card-content {
+            background-color: var(--dark-bg-card); /* Keep content background same as card */
+        }
+        body.dark-theme .link-card .card-title {
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .link-card .card-subtitle {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .link-card .delete-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .link-card .delete-btn:hover {
+            background-color: var(--accent-red);
+            color: #FFFFFF;
+        }
+        body.dark-theme .admin-form-container {
+            background-color: var(--dark-bg-card);
+            border-color: var(--dark-border);
+            box-shadow: 0 4px 12px var(--dark-shadow);
+        }
+        body.dark-theme .admin-form-container h2 {
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .admin-form-container label {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .admin-form-container input,
+        body.dark-theme .admin-form-container select,
+        body.dark-theme input[type="color"] { /* Style color picker in dark mode */
+            background-color: #2A3142;
+            border-color: #374151;
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme input[type="color"]::-webkit-color-swatch-wrapper {
+             padding: 0; /* Adjust padding if needed */
+        }
+        body.dark-theme input[type="color"]::-webkit-color-swatch {
+            border: none; /* Remove border in dark mode */
+            border-radius: 4px;
+        }
+        body.dark-theme .admin-form-container ::placeholder {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .app-footer {
+            color: var(--dark-text-secondary);
+            border-top-color: var(--dark-border);
+        }
+        body.dark-theme .modal {
+            background-color: var(--dark-bg-modal);
+            border: 1px solid var(--dark-border);
+        }
+        body.dark-theme .modal h2 {
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .modal label {
+            color: var(--dark-text-secondary);
+        }
+        body.dark-theme .modal input, body.dark-theme .modal select {
+            background-color: #2A3142;
+            border-color: #374151;
+            color: var(--dark-text-primary);
+        }
+        body.dark-theme .modal table {
+            border-color: var(--dark-border);
+        }
+        body.dark-theme .modal th, body.dark-theme .modal td {
+            border-color: var(--dark-border);
+        }
+        body.dark-theme .modal th {
+            background-color: #2A3142;
+        }
+        body.dark-theme .modal .btn-secondary {
+            background-color: #374151;
+            color: var(--dark-text-primary);
+            border-color: #4b5563;
+        }
+        body.dark-theme .modal .btn-secondary:hover {
+            background-color: #4b5563;
+        }
 
 
         /* --- App Container & Main Content --- */
@@ -193,11 +318,13 @@
         body.dark-theme .customize-btn:hover { background-color: #374151; color: var(--dark-text-primary); }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--light-text-secondary); font-size: 0.9rem; }
+        /* Style for the color picker input */
         .form-group input[type="color"] { padding: 2px; height: 44px; cursor: pointer; border-radius: 8px; background-color: #F8F9FB; border: 1px solid var(--light-border); width: 100%; box-sizing: border-box; }
         .form-group input[type="color"]::-webkit-color-swatch-wrapper { padding: 4px; }
         .form-group input[type="color"]::-webkit-color-swatch { border: 1px solid rgba(0,0,0,0.1); border-radius: 4px; }
         body.dark-theme .form-group input[type="color"] { background-color: #2A3142; border-color: #374151; }
-        body.dark-theme .form-group input[type="color"]::-webkit-color-swatch { border: none; }
+         body.dark-theme .form-group input[type="color"]::-webkit-color-swatch { border: none; }
+
         .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--light-border); background-color: #F8F9FB; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; font-family: var(--font-main); color: var(--light-text-primary); transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
         .form-group input:focus, .form-group select:focus, .form-group input[type="color"]:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
         #link-category-new, #link-category-icon-new { display: none; margin-top: 10px; }
@@ -539,36 +666,106 @@
         let currentCategory = 'All'; // State for active category
 
         // --- Theme Toggle Logic ---
-        function applyTheme(isDark) { /* ... (no changes) ... */ }
-        themeToggleBtn.addEventListener('click', () => { /* ... (no changes) ... */ });
+        function applyTheme(isDark) {
+            if (isDark) {
+                body.classList.add('dark-theme');
+                themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            applyTheme(!body.classList.contains('dark-theme'));
+        });
         
         // --- Fullscreen Toggle Logic ---
-        fullscreenToggleBtn.addEventListener('click', () => { /* ... (no changes) ... */ });
-        document.addEventListener('fullscreenchange', () => { /* ... (no changes) ... */ });
+        fullscreenToggleBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.warn(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+        document.addEventListener('fullscreenchange', () => {
+            const icon = document.fullscreenElement ? 'fa-compress' : 'fa-expand';
+            fullscreenToggleBtn.innerHTML = `<i class="fas ${icon}"></i>`;
+        });
 
         // --- Sidebar Toggle Logic (Mobile & Desktop) ---
-        mobileSidebarToggle.addEventListener('click', () => { /* ... (no changes) ... */ });
-        sidebarOverlay.addEventListener('click', () => { /* ... (no changes) ... */ });
-        sidebarToggleDesktop.addEventListener('click', () => { /* ... (no changes) ... */ });
+        mobileSidebarToggle.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+        sidebarToggleDesktop.addEventListener('click', () => {
+            sidebar.classList.toggle('mini');
+            mainContent.classList.toggle('sidebar-mini');
+            const state = sidebar.classList.contains('mini') ? 'mini' : 'full';
+            localStorage.setItem('sidebarState', state);
+        });
 
         // --- Admin Page Toggle Logic ---
-        function showAdminPage() { /* ... (no changes except removing category inputs) ... */ }
-        function showPublicPage() { /* ... (no changes) ... */ }
+        function showAdminPage() {
+            publicPage.style.display = 'none';
+            adminPage.style.display = 'block';
+            addLinkForm.reset(); // Clear the form
+            // Update breadcrumbs
+            const adminCrumb = document.createElement('li');
+            adminCrumb.id = 'admin-crumb';
+            adminCrumb.textContent = 'Add Link';
+            breadcrumbList.appendChild(adminCrumb);
+        }
+        
+        function showPublicPage() {
+            adminPage.style.display = 'none';
+            publicPage.style.display = 'block';
+            // Remove admin breadcrumb
+            const adminCrumb = document.getElementById('admin-crumb');
+            if (adminCrumb) {
+                adminCrumb.remove();
+            }
+            // Refetch and display links for the currently selected category
+            fetchAndDisplayLinks(currentCategory);
+        }
         addBtn.addEventListener('click', showAdminPage);
         
         // --- Modal Handling ---
         function openModal(modalId) {
-            document.getElementById(modalId)?.classList.add('active');
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+            }
         }
         function closeModal(modalId) {
-            document.getElementById(modalId)?.classList.remove('active');
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+            }
         }
         document.querySelectorAll('.modal-close-btn').forEach(btn => {
-            btn.addEventListener('click', () => closeModal(btn.dataset.target));
+            btn.addEventListener('click', () => {
+                const targetModalId = btn.dataset.target;
+                if (targetModalId) {
+                    closeModal(targetModalId);
+                }
+            });
         });
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) closeModal(overlay.id);
+                // Close only if clicking the overlay itself, not the modal content
+                if (e.target === overlay) {
+                    closeModal(overlay.id);
+                }
             });
         });
 
@@ -580,209 +777,241 @@
 
         // --- Populate Category Management Table ---
         function populateCategoryTable() {
-            categoryTableBody.innerHTML = ''; // Clear existing rows
-            const sortedCategories = [...allCategoriesData].sort((a,b) => a.name.localeCompare(b.name));
-
-            sortedCategories.forEach(cat => {
-                const row = categoryTableBody.insertRow();
+            categoryTableBody.innerHTML = ''; // Clear existing table
+            if (allCategoriesData.length === 0) {
+                categoryTableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No categories found. Add one!</td></tr>';
+                return;
+            }
+            allCategoriesData.forEach(cat => {
+                const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${cat.name}</td>
-                    <td><i class="fas ${cat.icon} icon-preview"></i> (${cat.icon})</td>
+                    <td><i class="${cat.icon} icon-preview"></i> ${cat.icon}</td>
                     <td><span class="color-swatch" style="background-color: ${cat.color};"></span> ${cat.color}</td>
                     <td class="actions">
-                        <button class="edit-cat-btn" data-id="${cat.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                        <button class="edit-cat-btn" data-id="${cat.id}" title="Edit"><i class="fas fa-pen"></i></button>
                         <button class="delete-cat-btn" data-id="${cat.id}" title="Delete"><i class="fas fa-trash-alt"></i></button>
                     </td>
                 `;
+                categoryTableBody.appendChild(row);
             });
 
-            // Add event listeners for edit/delete buttons
-            categoryTableBody.querySelectorAll('.edit-cat-btn').forEach(btn => {
-                btn.addEventListener('click', () => openCategoryEditModal(btn.dataset.id));
+            // Add event listeners for new buttons
+            document.querySelectorAll('.edit-cat-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    openCategoryEditModal(btn.dataset.id);
+                });
             });
-            categoryTableBody.querySelectorAll('.delete-cat-btn').forEach(btn => {
-                btn.addEventListener('click', () => deleteCategory(btn.dataset.id));
+            document.querySelectorAll('.delete-cat-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    deleteCategory(btn.dataset.id);
+                });
             });
         }
 
         // --- Open Add/Edit Category Modal ---
         function openCategoryEditModal(categoryId = null) {
             categoryEditForm.reset();
-            categoryEditId.value = categoryId || ''; // Store ID if editing
-            
             if (categoryId) {
+                // Editing existing category
                 const category = allCategoriesData.find(c => c.id === categoryId);
                 if (category) {
                     categoryEditTitle.textContent = 'Edit Category';
+                    categoryEditId.value = category.id;
+                    categoryEditOriginalName.value = category.name;
                     categoryEditName.value = category.name;
                     categoryEditIcon.value = category.icon;
                     categoryEditColor.value = category.color;
-                    categoryEditOriginalName.value = category.name; // Store original name for potential link updates
-                } else {
-                    console.error("Category not found for editing:", categoryId);
-                    return; // Should not happen
                 }
             } else {
-                categoryEditTitle.textContent = 'Add New Category';
-                categoryEditOriginalName.value = ''; // Clear original name for add
+                // Adding new category
+                categoryEditTitle.textContent = 'Add Category';
+                categoryEditId.value = '';
+                categoryEditOriginalName.value = '';
             }
             openModal('category-edit-modal');
         }
-
         addNewCategoryBtn.addEventListener('click', () => openCategoryEditModal());
 
         // --- Save Category (Add or Edit) ---
         categoryEditForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const id = categoryEditId.value;
-            const name = categoryEditName.value.trim();
-            const icon = categoryEditIcon.value.trim() || 'fas fa-bookmark'; // Default icon
-            const color = categoryEditColor.value;
-            const originalName = categoryEditOriginalName.value; // Get original name
-
-            if (!name) {
-                alert('Category name cannot be empty.');
-                return;
-            }
-
             categorySaveBtn.disabled = true;
             categorySaveBtn.textContent = 'Saving...';
 
-            try {
-                if (id) { // Editing existing
-                    const categoryRef = doc(db, "categories", id);
-                    await updateDoc(categoryRef, { name, icon, color });
-                    
-                    // If name changed, update all links using the old name
-                    if (name !== originalName && originalName) {
-                        const batch = writeBatch(db);
-                        const q = query(linksCollectionRef, where("category", "==", originalName));
-                        const linkSnapshot = await getDocs(q);
-                        linkSnapshot.forEach(linkDoc => {
-                            batch.update(linkDoc.ref, { category: name });
-                        });
-                        await batch.commit();
-                        console.log(`Updated ${linkSnapshot.size} links from category "${originalName}" to "${name}".`);
-                    }
-                    alert('Category updated successfully!');
+            const categoryData = {
+                name: categoryEditName.value,
+                icon: categoryEditIcon.value,
+                color: categoryEditColor.value,
+            };
+            const catId = categoryEditId.value;
+            const originalName = categoryEditOriginalName.value;
 
-                } else { // Adding new
-                     // Check if category name already exists
-                    if (allCategoriesData.some(cat => cat.name.toLowerCase() === name.toLowerCase())) {
-                        alert(`Category "${name}" already exists.`);
-                        categorySaveBtn.disabled = false;
-                        categorySaveBtn.textContent = 'Save Category';
-                        return;
+            try {
+                if (catId) {
+                    // --- Edit Existing Category ---
+                    const categoryRef = doc(db, "categories", catId);
+                    await updateDoc(categoryRef, categoryData);
+
+                    // If name changed, update all associated links
+                    if (originalName && originalName !== categoryData.name) {
+                        const linksQuery = query(linksCollectionRef, where("category", "==", originalName));
+                        const linksSnapshot = await getDocs(linksQuery);
+                        
+                        if (!linksSnapshot.empty) {
+                            const batch = writeBatch(db);
+                            linksSnapshot.forEach(linkDoc => {
+                                batch.update(linkDoc.ref, { category: categoryData.name });
+                            });
+                            await batch.commit();
+                        }
                     }
-                    await addDoc(categoriesCollectionRef, { name, icon, color });
-                    alert('Category added successfully!');
+                } else {
+                    // --- Add New Category ---
+                    await addDoc(categoriesCollectionRef, categoryData);
                 }
-                
+
+                // Refresh everything
+                await fetchAllData();
+                populateCategories();
+                populateCategoryTable();
+                fetchAndDisplayLinks(currentCategory); // Refresh main links view
                 closeModal('category-edit-modal');
-                await fetchAllData(); // Refetch all data
-                populateCategoryTable(); // Update table in list modal
-                populateCategories(); // Update sidebar and admin dropdown
-                fetchAndDisplayLinks(currentCategory); // Refresh displayed links
 
             } catch (error) {
                 console.error("Error saving category: ", error);
-                alert('Error saving category. Please check console.');
+                // In a real app, show a user-friendly error message
             } finally {
                 categorySaveBtn.disabled = false;
                 categorySaveBtn.textContent = 'Save Category';
             }
         });
 
-
         // --- Delete Category ---
         async function deleteCategory(categoryId) {
-            const categoryToDelete = allCategoriesData.find(c => c.id === categoryId);
-            if (!categoryToDelete) return;
-
-            // **Check if category is in use by any links**
-            const linksUsingCategory = allLinksData.filter(link => (link.category || 'General') === categoryToDelete.name);
-
-            if (linksUsingCategory.length > 0) {
-                alert(`Cannot delete category "${categoryToDelete.name}" because ${linksUsingCategory.length} link(s) are still using it. Please reassign those links first.`);
-                return;
-            }
+            const category = allCategoriesData.find(c => c.id === categoryId);
+            if (!category) return;
             
-            // Proceed with deletion if not in use
-            if (confirm(`Are you sure you want to delete the category "${categoryToDelete.name}"? This action cannot be undone.`)) {
-                try {
-                    await deleteDoc(doc(db, "categories", categoryId));
-                    alert('Category deleted successfully!');
-                    
-                    // Refetch, repopulate, redisplay
-                    await fetchAllData();
-                    populateCategoryTable();
-                    populateCategories();
-                    // If the deleted category was the current filter, switch to 'All'
-                    if (currentCategory === categoryToDelete.name) {
-                        currentCategory = 'All';
-                        // Update active state in sidebar after repopulating
-                        sidebarNav.querySelectorAll('li').forEach(li => li.classList.remove('active'));
-                        sidebarNav.querySelector('a[data-category="All"]').closest('li').classList.add('active');
-                    }
-                    fetchAndDisplayLinks(currentCategory);
+            // Use a simple confirm dialog (replace with a custom modal in a real app)
+            // if (!confirm(`Are you sure you want to delete "${category.name}"? All links in this category will be moved to "General".`)) {
+            //     return;
+            // }
+            
+            // In a real app, you'd use a custom modal confirmation, not window.confirm.
+            // For this example, we'll just proceed.
+            
+            console.log(`Deleting category: ${category.name}. Re-assigning links...`);
 
-                } catch (error) {
-                    console.error("Error deleting category: ", error);
-                    alert('Error deleting category. Please check console.');
+            try {
+                // Find all links with this category and update them to "General" in a batch
+                const linksQuery = query(linksCollectionRef, where("category", "==", category.name));
+                const linksSnapshot = await getDocs(linksQuery);
+                
+                const batch = writeBatch(db);
+                if (!linksSnapshot.empty) {
+                    linksSnapshot.forEach(linkDoc => {
+                        batch.update(linkDoc.ref, { category: "General" });
+                    });
                 }
+                
+                // Also delete the category doc itself
+                const categoryRef = doc(db, "categories", categoryId);
+                batch.delete(categoryRef);
+
+                // Commit all changes
+                await batch.commit();
+
+                // Refresh UI
+                await fetchAllData();
+                populateCategories();
+                populateCategoryTable();
+                
+                // If the deleted category was the active one, switch to 'All'
+                if (currentCategory === category.name) {
+                    currentCategory = 'All';
+                    // Set 'All Links' as active in sidebar
+                    document.querySelector('.sidebar-nav li.active')?.classList.remove('active');
+                    document.querySelector('.sidebar-nav li a[data-category="All"]')?.parentElement.classList.add('active');
+                }
+                fetchAndDisplayLinks(currentCategory); // Refresh main links view
+
+            } catch (error) {
+                console.error("Error deleting category: ", error);
+                // In a real app, show a user-friendly error message
+            }
+        }
+        
+        // --- Delete Link ---
+        async function deleteLink(idToDelete) {
+            // In a real app, use a custom modal confirmation
+            // if (!confirm("Are you sure you want to delete this link?")) {
+            //     return;
+            // }
+
+            try {
+                await deleteDoc(doc(db, "links", idToDelete));
+                // After deletion, refetch all data and update UI
+                await fetchAllData();
+                fetchAndDisplayLinks(currentCategory);
+            } catch (error) {
+                console.error("Error deleting link: ", error);
             }
         }
 
 
         // --- Populate Categories (Sidebar & Admin Dropdown) ---
         function populateCategories() {
-            const categoryNames = allCategoriesData.map(c => c.name);
-            const allCategoryNamesSet = new Set(categoryNames); // Use Set for quick checks
-
-             // Populate Sidebar
-            sidebarNav.innerHTML = ''; // Clear existing
-            const allLink = document.createElement('li');
-            allLink.innerHTML = `<a href="#" data-category="All"><i class="fas fa-fw fa-border-all"></i> <span>All Links</span></a>`;
-            if (currentCategory === 'All') allLink.classList.add('active');
-            sidebarNav.appendChild(allLink);
-
-            const sortedCategories = [...allCategoriesData].sort((a,b) => a.name.localeCompare(b.name));
-
-            sortedCategories.forEach(cat => {
-                const li = document.createElement('li');
-                li.innerHTML = `<a href="#" data-category="${cat.name}"><i class="fas fa-fw ${cat.icon}"></i> <span>${cat.name}</span></a>`;
-                if (currentCategory === cat.name) li.classList.add('active');
-                sidebarNav.appendChild(li);
-            });
-
-            // Populate Admin Select
-            const currentSelectValue = linkCategorySelect.value;
-            linkCategorySelect.innerHTML = ''; // Clear existing
+            // Clear existing categories (except "All Links")
+            const existingCategories = sidebarNav.querySelectorAll('li:not(:first-child)');
+            existingCategories.forEach(li => li.remove());
             
-            sortedCategories.forEach(cat => {
+            linkCategorySelect.innerHTML = '<option value="General">General</option>'; // Default option
+
+            // Sort categories alphabetically
+            allCategoriesData.sort((a, b) => a.name.localeCompare(b.name));
+            
+            allCategoriesData.forEach(cat => {
+                // Add to sidebar
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#" data-category="${cat.name}">
+                    <i class="${cat.icon} fa-fw"></i> <span>${cat.name}</span>
+                </a>`;
+                sidebarNav.appendChild(li);
+
+                // Add to admin dropdown
                 const option = document.createElement('option');
                 option.value = cat.name;
                 option.textContent = cat.name;
                 linkCategorySelect.appendChild(option);
             });
-            
-            // Try to restore previous selection or default
-            if (allCategoryNamesSet.has(currentSelectValue)) {
-                linkCategorySelect.value = currentSelectValue;
-            } else if (sortedCategories.length > 0) {
-                 linkCategorySelect.value = sortedCategories[0].name; // default to first if exists
-            } else {
-                 // Handle case with no categories yet (maybe add a placeholder?)
-                 const defaultOption = document.createElement('option');
-                 defaultOption.textContent = 'No categories defined';
-                 defaultOption.disabled = true;
-                 linkCategorySelect.appendChild(defaultOption);
-            }
         }
         
         // --- Sidebar Category Click Logic ---
-        sidebarNav.addEventListener('click', (e) => { /* ... (no changes) ... */ });
+        sidebarNav.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link) {
+                e.preventDefault();
+                const category = link.dataset.category;
+                
+                if (category === currentCategory && adminPage.style.display === 'none') return; // Do nothing if already active
 
+                // Update active state
+                document.querySelector('.sidebar-nav li.active')?.classList.remove('active');
+                link.parentElement.classList.add('active');
+                
+                currentCategory = category;
+                
+                // Switch to public page if not already there
+                showPublicPage(); 
+                // fetchAndDisplayLinks(currentCategory) is called inside showPublicPage()
+
+                // Close mobile sidebar on selection
+                if (sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                    sidebarOverlay.classList.remove('active');
+                }
+            }
+        });
 
         // --- Fetch and Display Links (Filterable) ---
         function fetchAndDisplayLinks(categoryFilter = 'All') {
@@ -802,12 +1031,12 @@
                 const categoryInfo = allCategoriesData.find(c => c.name === category);
                 
                 const primaryColor = categoryInfo ? categoryInfo.color : '#60A5FA'; // Use category color or default
-                const firstLetter = name ? name.charAt(0) : '?'; // Get first letter
+                const firstLetter = name ? name.charAt(0).toUpperCase() : '?'; // Get first letter, ensure uppercase
 
                 const card = document.createElement('div');
                 card.className = 'link-card';
                 // Add data attributes for search
-                card.dataset.name = name.toLowerCase();
+                card.dataset.name = (name || '').toLowerCase(); // Ensure name exists
                 card.dataset.category = (category || 'general').toLowerCase();
 
                 card.innerHTML = `
@@ -821,10 +1050,10 @@
                     </div>
                     <div class="card-content">
                         <div>
-                            <h3 class="card-title">${name}</h3>
-                            <p class="card-subtitle">${category || '&nbsp;'}</p> 
+                            <h3 class="card-title">${name || 'Untitled'}</h3>
+                            <p class="card-subtitle">${category || 'General'}</p> 
                         </div>
-                        <a href="${url}" 
+                        <a href="${url || '#'}" 
                            class="view-btn" 
                            target="_blank" 
                            rel="noopener noreferrer">
@@ -836,12 +1065,13 @@
                 linksContainer.appendChild(card);
             });
 
-            // Re-attach delete listeners
+            // Re-attach delete listeners after links are added
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', (event) => {
                     event.stopPropagation();
+                    event.preventDefault(); // Prevent link navigation if card is ever wrapped in <a>
                     const idToDelete = event.currentTarget.dataset.id;
-                    deleteLink(idToDelete);
+                    deleteLink(idToDelete); // Now deleteLink is defined
                 });
             });
             
@@ -850,78 +1080,89 @@
         }
         
         // --- Search Bar Logic ---
-        function filterLinksBySearch() { /* ... (no changes) ... */ }
+        function filterLinksBySearch() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const allCards = linksContainer.querySelectorAll('.link-card');
+            let visibleCount = 0;
+            
+            allCards.forEach(card => {
+                const name = card.dataset.name || '';
+                const category = card.dataset.category || '';
+                const isVisible = name.includes(searchTerm) || category.includes(searchTerm);
+                
+                card.classList.toggle('hidden', !isVisible);
+                if (isVisible) {
+                    visibleCount++;
+                }
+            });
+
+            // Show/hide no results message
+            const noResultsMsg = linksContainer.querySelector('.no-search-results');
+            if (allCards.length > 0 && visibleCount === 0) {
+                if (noResultsMsg) {
+                    noResultsMsg.textContent = `No links match "${searchInput.value}".`;
+                    noResultsMsg.style.display = 'block';
+                } else {
+                    linksContainer.innerHTML = `<p class="no-search-results">No links match "${searchInput.value}".</p>`;
+                }
+            } else if (noResultsMsg && visibleCount > 0) {
+                 noResultsMsg.style.display = 'none';
+            } else if (allCards.length === 0 && !noResultsMsg) {
+                // This case is handled by fetchAndDisplayLinks
+            }
+        }
         searchInput.addEventListener('input', filterLinksBySearch);
 
         
         // --- Fetch All Data (Main Loader) ---
         async function fetchAllData() {
-            if (!db) { /* ... (no changes) ... */ }
             try {
-                 linksContainer.innerHTML = "<p class='no-search-results'>Loading...</p>"; // Changed message slightly
-                
-                // 1. Fetch Categories
-                allCategoriesData = []; // Clear cache
-                const categorySnapshot = await getDocs(categoriesCollectionRef); // Use correct ref
-                categorySnapshot.forEach((doc) => {
-                    allCategoriesData.push({ id: doc.id, ...doc.data() }); // Store full category data
-                });
-                
-                // 2. Fetch Links
-                const linkSnapshot = await getDocs(linksCollectionRef); // Use correct ref
-                allLinksData = []; // Clear cache
-                linkSnapshot.forEach((doc) => {
-                    allLinksData.push({ id: doc.id, ...doc.data() }); // Store full link data
-                });
-                
-                // Sort links alphabetically by name
-                allLinksData.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-                
-            } catch (error) { /* ... (no changes) ... */ }
+                // Fetch Categories
+                const categorySnapshot = await getDocs(categoriesCollectionRef);
+                allCategoriesData = categorySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Fetch Links
+                const linksSnapshot = await getDocs(linksCollectionRef);
+                allLinksData = linksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+                linksContainer.innerHTML = `<p class='no-search-results'>Error fetching data. Check console.</p>`;
+            }
         }
 
         // --- Add Link Handler ---
         addLinkForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = linkName.value;
-            const category = linkCategorySelect.value; // Just get selected value
-            const url = linkUrl.value;
-            // Color is now determined by category, no need to get it here
-
-            if (!category) {
-                 alert('No category selected. Please add or select a category first.');
-                 return;
-            }
-
             submitBtn.disabled = true;
             submitBtn.textContent = 'Adding...';
-            
-            try {
-                // Add the new link
-                await addDoc(linksCollectionRef, { // Use correct ref
-                    name: name,
-                    category: category,
-                    url: url,
-                    // No colorCode needed here
-                });
 
-                alert('Link added successfully!');
-                addLinkForm.reset();
-                // No color picker to reset
+            const newLink = {
+                name: linkName.value,
+                category: linkCategorySelect.value || "General",
+                url: linkUrl.value,
+                // colorCode is no longer used, category color is used instead
+            };
+
+            try {
+                await addDoc(linksCollectionRef, newLink);
                 
-                // Refetch links (categories don't change here)
-                await fetchAllData(); // Refetching all might be needed if category list was empty
-                populateCategories(); // Ensure dropdown is correct
-                fetchAndDisplayLinks(currentCategory); 
-                showPublicPage(); // Go back to public page
+                // After adding, refetch all data
+                await fetchAllData();
                 
-                // Replace Back button with Add button
-                const backBtn = document.querySelector('.header-controls .header-icon-button[title="Back to Home"]');
-                if (backBtn) backBtn.replaceWith(addBtn);
+                // Set the current category to the one just added
+                currentCategory = newLink.category;
+                
+                // Update sidebar active state
+                document.querySelector('.sidebar-nav li.active')?.classList.remove('active');
+                const newActiveLink = document.querySelector(`.sidebar-nav li a[data-category="${currentCategory}"]`);
+                newActiveLink?.parentElement.classList.add('active');
+                
+                // Switch back to public page to see the new link
+                showPublicPage(); // This will also call fetchAndDisplayLinks
 
             } catch (error) {
                 console.error("Error adding link: ", error);
-                alert('Error adding link. Please check console.');
+                // In a real app, show a user-friendly error
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Add Link';
@@ -960,4 +1201,3 @@
     </script>
 </body>
 </html>
-
