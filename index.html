@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dezign.mvs | Dashboard</title>
+    <title>Link Dashboard</title>
     <!-- Font Awesome for icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Removed Inter Font Link -->
 
@@ -53,6 +53,12 @@
         }
 
         /* --- Base Layout & Typography --- */
+        html {
+            box-sizing: border-box;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
         body {
             font-family: var(--font-main); /* Apply Satoshi */
             margin: 0;
@@ -106,6 +112,7 @@
         }
         body.dark-theme .sidebar-nav li.active a {
              box-shadow: none; /* Modernize doesn't use strong shadows on sidebar active */
+             background-image: none; /* Ensure gradient removed */
         }
         body.dark-theme .sidebar-toggle-desktop { /* Adjusted */
             color: var(--dark-text-secondary);
@@ -244,16 +251,18 @@
         .sidebar-logo-content { display: flex; align-items: center; gap: 10px; overflow: hidden; flex-grow: 1; }
         .sidebar-logo .fa-layer-group { color: var(--accent-blue); font-size: 1.8rem; }
         .sidebar-logo-text { transition: opacity 0.2s ease, width 0.2s ease; white-space: nowrap; }
-        .sidebar-toggle-desktop { background: none; border: none; color: var(--light-text-secondary); padding: 5px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 36px; height: 36px; flex-shrink: 0; transition: background-color 0.2s ease, color 0.2s ease; }
+        .sidebar-toggle-desktop { background: none; border: none; color: var(--light-text-secondary); padding: 5px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 36px; height: 36px; flex-shrink: 0; transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease; }
+        .sidebar-toggle-desktop .fa-fw { transition: transform 0.3s ease; } /* Add transition for icon */
         .sidebar-toggle-desktop:hover { color: var(--light-text-primary); background-color: #F0F2F5; }
         body.dark-theme .sidebar-toggle-desktop { color: var(--dark-text-secondary); }
         body.dark-theme .sidebar-toggle-desktop:hover { color: var(--dark-text-primary); background-color: rgba(255, 255, 255, 0.08); }
+        .app-sidebar.mini .sidebar-toggle-desktop .fa-fw { transform: rotate(180deg); } /* Rotate icon when mini */
         .sidebar-nav-container { padding: 0 20px; overflow-y: auto; flex-grow: 1; padding-bottom: 20px; }
         .sidebar-nav-title { font-size: 0.75rem; font-weight: 600; color: var(--light-text-secondary); text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 10px; margin-top: 15px; white-space: nowrap; overflow: hidden; transition: opacity 0.2s ease; }
         .sidebar-nav { list-style: none; padding: 0; margin: 0; }
-        .sidebar-nav li a { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 500; color: var(--light-text-secondary); transition: background-color 0.2s ease, color 0.2s ease; white-space: nowrap; overflow: hidden; font-size: 0.9rem; }
+        .sidebar-nav li a { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 500; color: var(--light-text-secondary); transition: background 0.2s ease, color 0.2s ease; white-space: nowrap; overflow: hidden; font-size: 0.9rem; }
         .sidebar-nav li a:hover { background-color: #F0F2F5; color: var(--light-text-primary); }
-        .sidebar-nav li.active a { background-color: var(--accent-blue); color: #FFFFFF; box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3); }
+        .sidebar-nav li.active a { background: linear-gradient(to right, #60A5FA, #3B82F6); color: #FFFFFF; box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3); }
         .sidebar-nav li a .fa-fw { width: 1.25em; text-align: center; flex-shrink: 0; font-size: 1.1rem; }
         .sidebar-nav li.active a .fa-fw { color: #FFFFFF; }
         .app-sidebar.mini { width: var(--sidebar-width-mini); }
@@ -264,22 +273,23 @@
         .app-sidebar.mini .sidebar-nav-title { opacity: 0; height: 0; padding: 0; margin: 0; }
         .app-sidebar.mini .sidebar-nav li a { justify-content: center; }
         .app-sidebar.mini .sidebar-nav li a span { opacity: 0; width: 0; visibility: hidden; }
-        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 998; }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 998; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s 0.3s; }
+        .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s 0s; }
 
 
         /* --- App Header (Navbar) --- */
-        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--light-bg-header); border-bottom: 1px solid var(--light-border); flex-shrink: 0; box-shadow: 0 2px 5px var(--light-shadow); transition: background-color 0.3s ease, border-color 0.3s ease; }
-        .header-left { display: flex; align-items: center; gap: 20px; }
-        .header-controls { display: flex; gap: 10px; align-items: center; }
-        .mobile-sidebar-toggle { background: none; border: none; color: var(--light-text-secondary); font-size: 1.3rem; cursor: pointer; padding: 8px; border-radius: 50%; transition: color 0.3s ease, background-color 0.3s ease; display: none; }
+        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: var(--light-bg-header); border-bottom: 1px solid var(--light-border); flex-shrink: 0; box-shadow: 0 2px 5px var(--light-shadow); transition: background-color 0.3s ease, border-color 0.3s ease, padding 0.3s ease; }
+        .header-left { display: flex; align-items: center; gap: 20px; flex-grow: 1; }
+        .header-controls { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+        .mobile-sidebar-toggle { background: none; border: none; color: var(--light-text-secondary); font-size: 1.3rem; cursor: pointer; padding: 8px; border-radius: 50%; transition: color 0.3s ease, background-color 0.3s ease, transform 0.1s ease; display: none; }
         .mobile-sidebar-toggle:hover { background-color: #F0F2F5; color: var(--light-text-primary); }
         body.dark-theme .mobile-sidebar-toggle { color: var(--dark-text-secondary); }
         body.dark-theme .mobile-sidebar-toggle:hover { background-color: #374151; color: var(--dark-text-primary); }
-        .search-bar { position: relative; width: 300px; }
+        .search-bar { position: relative; width: 100%; max-width: 350px; } /* Adjusted max-width */
         .search-bar .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--light-text-secondary); }
         .search-bar input { width: 100%; padding: 10px 15px 10px 40px; background-color: #F0F2F5; border: 1px solid var(--light-border); border-radius: 8px; color: var(--light-text-primary); font-family: var(--font-main); font-size: 0.9rem; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; }
         .search-bar input:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
-        .header-icon-button { background-color: #F0F2F5; color: var(--light-text-secondary); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, color 0.2s ease; }
+        .header-icon-button { background-color: #F0F2F5; color: var(--light-text-secondary); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease; }
         .header-icon-button:hover { background-color: #E5E7EB; color: var(--light-text-primary); }
 
 
@@ -294,25 +304,25 @@
         /* --- Dashboard Grid & Link Cards --- */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
         .dashboard-grid .no-search-results { grid-column: 1 / -1; text-align: center; color: var(--light-text-secondary); margin-top: 40px; font-size: 1.1rem; }
-        .link-card { background-color: var(--light-bg-card); border-radius: 12px; box-shadow: 0 4px 12px var(--light-shadow); position: relative; height: 180px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--light-border); transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease; }
+        .link-card { background-color: var(--light-bg-card); border-radius: 12px; box-shadow: 0 4px 12px var(--light-shadow); position: relative; /* Remove fixed height */ min-height: 180px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--light-border); transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease; }
         .link-card.hidden { display: none; }
         .link-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px var(--light-shadow); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-size: cover; background-position: center; border-top-left-radius: 12px; border-top-right-radius: 12px; height: 80px; position: relative; z-index: 1; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; padding: 15px; background-size: cover; background-position: center; border-top-left-radius: 12px; border-top-right-radius: 12px; min-height: 80px; position: relative; z-index: 1; }
         .card-initial-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: rgba(255, 255, 255, 0.3); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); color: #FFFFFF; font-size: 1.5rem; font-weight: 600; flex-shrink: 0; font-family: var(--font-heading); text-transform: uppercase; }
-        .delete-btn { background-color: rgba(0, 0, 0, 0.2); border: none; color: #FFFFFF; font-size: 1rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s, color 0.2s; z-index: 10; }
+        .delete-btn { background-color: rgba(0, 0, 0, 0.2); border: none; color: #FFFFFF; font-size: 1rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s, color 0.2s, transform 0.1s ease; z-index: 10; }
         .delete-btn:hover { background-color: var(--accent-red); color: #FFFFFF; }
         .card-content { flex-grow: 1; padding: 15px; display: flex; flex-direction: column; justify-content: space-between; background-color: var(--light-bg-card); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; border-top: 1px solid var(--light-border); transition: background-color 0.2s ease, border-color 0.2s ease; }
         body.dark-theme .card-content { border-top-color: var(--dark-border); }
         .card-title { font-size: 1rem; font-weight: 600; color: var(--light-text-primary); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-subtitle { font-size: 0.85rem; color: var(--light-text-secondary); margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .view-btn { width: 100%; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: background-color 0.2s ease, box-shadow 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 8px; color: #FFFFFF; background-color: var(--accent-blue); border: none; }
-        .view-btn:hover { filter: brightness(1.1); box-shadow: 0 2px 10px rgba(96, 165, 250, 0.3); }
+        .card-subtitle { font-size: 0.85rem; color: var(--light-text-secondary); margin-bottom: 12px; /* Increased bottom margin */ white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .view-btn { width: 100%; padding: 8px 15px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; text-decoration: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: #FFFFFF; background: linear-gradient(to right, #60A5FA, #3B82F6); border: none; transition: background 0.3s ease, box-shadow 0.2s ease, transform 0.1s ease; margin-top: auto; /* Push button to bottom */ }
+        .view-btn:hover { background: linear-gradient(to right, #7dd3fc, #60A5FA); box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4); }
         
         /* --- Admin Form Page --- */
         .admin-form-container { max-width: 600px; margin: 40px auto; padding: 30px; background-color: var(--light-bg-card); border-radius: 8px; box-shadow: 0 4px 12px var(--light-shadow); border: 1px solid var(--light-border); transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
         .admin-form-container h2 { font-family: var(--font-main); font-weight: 700; text-align: center; margin-top: 0; margin-bottom: 30px; color: var(--light-text-primary); }
         .admin-form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; } /* New header for title and customize button */
-        .customize-btn { background-color: #F0F2F5; color: var(--light-text-secondary); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: background-color 0.2s, color 0.2s; }
+        .customize-btn { background-color: #F0F2F5; color: var(--light-text-secondary); border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: background-color 0.2s, color 0.2s, transform 0.1s ease; }
         .customize-btn:hover { background-color: #E5E7EB; color: var(--light-text-primary); }
         body.dark-theme .customize-btn { background-color: #2A3142; color: var(--dark-text-secondary); }
         body.dark-theme .customize-btn:hover { background-color: #374151; color: var(--dark-text-primary); }
@@ -328,28 +338,60 @@
         .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--light-border); background-color: #F8F9FB; border-radius: 8px; box-sizing: border-box; font-size: 0.95rem; font-family: var(--font-main); color: var(--light-text-primary); transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
         .form-group input:focus, .form-group select:focus, .form-group input[type="color"]:focus { outline: none; border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
         #link-category-new, #link-category-icon-new { display: none; margin-top: 10px; }
-        .admin-form-container button[type="submit"] { width: 100%; padding: 12px; font-size: 1.1rem; font-weight: 600; background-color: var(--accent-blue); color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease, box-shadow 0.3s ease; margin-top: 20px; }
-        .admin-form-container button[type="submit"]:hover { background-color: #4F8CE3; box-shadow: 0 4px 15px rgba(96, 165, 250, 0.4); }
+        .admin-form-container button[type="submit"] { width: 100%; padding: 12px; font-size: 1.1rem; font-weight: 600; background: linear-gradient(to right, #60A5FA, #3B82F6); color: white; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease; margin-top: 20px; }
+        .admin-form-container button[type="submit"]:hover { background: linear-gradient(to right, #7dd3fc, #60A5FA); box-shadow: 0 4px 15px rgba(96, 165, 250, 0.4); }
         
         /* --- Footer --- */
         .app-footer { text-align: center; padding: 20px 30px; margin-top: auto; color: var(--light-text-secondary); font-size: 0.85rem; border-top: 1px solid var(--light-border); transition: color 0.3s ease, border-color 0.3s ease; flex-shrink: 0; }
 
         /* --- Modals --- */
-        .modal-overlay { display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-overlay.active { display: flex; }
-        .modal { background-color: var(--light-bg-modal); border-radius: 12px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 600px; /* Default for category list */ border: 1px solid var(--light-border); }
+        .modal-overlay {
+            visibility: hidden;
+            opacity: 0;
+            position: fixed; 
+            inset: 0; 
+            background-color: rgba(0,0,0,0.6); 
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px); 
+            z-index: 1000; 
+            display: flex; /* Keep flex for centering */
+            justify-content: center; 
+            align-items: center; 
+            transition: visibility 0s 0.2s, opacity 0.2s ease; /* Delay hiding */
+        }
+        .modal-overlay.active { 
+            visibility: visible;
+            opacity: 1;
+            transition: visibility 0s 0s, opacity 0.2s ease;
+        }
+        .modal { 
+            background-color: var(--light-bg-modal); 
+            border-radius: 12px; 
+            padding: 30px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            width: 90%; 
+            max-width: 600px; /* Default for category list */ 
+            border: 1px solid var(--light-border); 
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .modal-overlay.active .modal {
+            transform: scale(1);
+            opacity: 1;
+        }
         .modal-small { max-width: 400px; } /* For add/edit form */
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--light-border); padding-bottom: 15px; }
         .modal-header h2 { font-size: 1.25rem; font-weight: 600; }
-        .modal-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--light-text-secondary); cursor: pointer; padding: 5px; line-height: 1; }
+        .modal-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--light-text-secondary); cursor: pointer; padding: 5px; line-height: 1; transition: color 0.2s ease, transform 0.1s ease; }
         .modal-close-btn:hover { color: var(--light-text-primary); }
         body.dark-theme .modal-close-btn { color: var(--dark-text-secondary); }
         body.dark-theme .modal-close-btn:hover { color: var(--dark-text-primary); }
         .modal-content { max-height: 60vh; overflow-y: auto; }
         .modal-actions { margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--light-border); padding-top: 20px; }
-        .modal button { padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background-color 0.2s, color 0.2s; border: 1px solid transparent; }
-        .modal .btn-primary { background-color: var(--accent-blue); color: #fff; }
-        .modal .btn-primary:hover { background-color: #4F8CE3; }
+        .modal button { padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: background 0.2s, color 0.2s, transform 0.1s ease, border-color 0.2s; border: 1px solid transparent; }
+        .modal .btn-primary { background: linear-gradient(to right, #60A5FA, #3B82F6); color: #fff; border: none; }
+        .modal .btn-primary:hover { background: linear-gradient(to right, #7dd3fc, #60A5FA); }
         .modal .btn-secondary { background-color: #F0F2F5; color: var(--light-text-primary); border-color: var(--light-border); }
         .modal .btn-secondary:hover { background-color: #E5E7EB; }
         .modal .btn-danger { background-color: var(--accent-red); color: #fff; }
@@ -370,28 +412,44 @@
         .category-table .color-swatch { display: inline-block; width: 20px; height: 20px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); vertical-align: middle; margin-right: 8px; }
         .category-table .icon-preview { font-size: 1.1rem; width: 1.5em; text-align: center; display: inline-block; vertical-align: middle; margin-right: 8px;}
         .category-table .actions { display: flex; gap: 8px; }
-        .category-table .actions button { background: none; border: none; padding: 5px; cursor: pointer; font-size: 1rem; color: var(--light-text-secondary); }
+        .category-table .actions button { background: none; border: none; padding: 5px; cursor: pointer; font-size: 1rem; color: var(--light-text-secondary); transition: color 0.2s ease, transform 0.1s ease; }
         .category-table .actions button:hover { color: var(--accent-blue); }
         .category-table .actions .delete-cat-btn:hover { color: var(--accent-red); }
         body.dark-theme .category-table .actions button { color: var(--dark-text-secondary); }
+
+        /* --- Button Active State (Touch Feedback) --- */
+        .header-icon-button:active,
+        .sidebar-toggle-desktop:active,
+        .mobile-sidebar-toggle:active,
+        .view-btn:active,
+        .admin-form-container button[type="submit"]:active,
+        .modal button:active,
+        .category-table .actions button:active,
+        .customize-btn:active,
+        .delete-btn:active,
+        .modal-close-btn:active {
+            transform: scale(0.96);
+            transition-duration: 0.05s; /* Faster reaction for active state */
+        }
 
 
         /* --- Mobile Responsive Adjustments --- */
         @media (max-width: 992px) { /* Tablet breakpoint */
             .app-sidebar { position: fixed; left: 0; top: 0; height: 100%; z-index: 1000; transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
             .app-sidebar.active { transform: translateX(0); }
-            .sidebar-overlay.active { display: block; }
+            /* sidebar-overlay styles updated above for smoother transition */
             .mobile-sidebar-toggle { display: block; }
             .app-container { width: 100%; }
-            .app-container.sidebar-mini { width: 100%; }
+            .app-container.sidebar-mini { width: 100%; } /* No change needed */
             .sidebar-toggle-desktop { display: none; }
             .app-header { padding: 15px 20px; gap: 15px; }
-            .header-left { gap: 10px; }
-            .search-bar { width: auto; flex-grow: 1; min-width: 150px; }
+            .header-left { gap: 10px; flex-grow: 1; /* Allow left side to grow */ }
+            .search-bar { width: auto; max-width: none; } /* Allow search to fill space */
+            .header-controls { flex-shrink: 0; } /* Prevent controls shrinking */
             .app-breadcrumbs { padding: 12px 20px; }
             .dashboard-grid { padding: 15px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-            .link-card { height: 170px; }
-            .card-header { height: 70px; padding: 12px; }
+            .link-card { min-height: 170px; } /* Use min-height */
+            .card-header { min-height: 70px; padding: 12px; }
             .card-initial-circle { width: 45px; height: 45px; font-size: 1.3rem; }
             .delete-btn { width: 32px; height: 32px; font-size: 0.9rem; }
             .card-content { padding: 12px; }
@@ -401,13 +459,32 @@
             .modal { width: 95%; max-width: 95%; } /* Make modals wider on mobile */
         }
         @media (max-width: 576px) { /* Smaller mobile screens */
-            .app-header { flex-wrap: wrap; justify-content: center; }
-            .header-left { width: 100%; justify-content: space-between; margin-bottom: 15px; }
-            .search-bar { width: 100%; order: 3; }
-            .header-controls { width: 100%; justify-content: center; gap: 20px; }
+            .app-header { 
+                flex-wrap: wrap; 
+                justify-content: space-between; /* Align items to ends */
+                padding: 10px 15px; /* Reduced padding */
+                gap: 10px; /* Reduced gap */
+            }
+            .header-left { 
+                width: auto; /* Don't make it full width */
+                justify-content: flex-start; /* Align toggle to start */
+                margin-bottom: 0; /* Remove margin */
+                flex-grow: 0; /* Don't let it grow excessively */
+            }
+             .header-controls { 
+                width: auto; /* Don't make it full width */
+                justify-content: flex-end; /* Align icons to end */
+                gap: 8px; /* Further reduce gap */
+            }
+            .search-bar { 
+                width: 100%; 
+                order: 3; /* Put search bar last */
+                margin-top: 10px; /* Space above search bar */
+            }
+           
             .app-main-content { padding: 10px; }
             .dashboard-grid { padding: 10px; gap: 15px; }
-            .admin-form-container { margin: 20px auto; padding: 20px; }
+            .admin-form-container { margin: 20px 10px; padding: 20px; }
             .modal-header h2 { font-size: 1.1rem; }
             .modal { padding: 20px; }
             .modal-actions { flex-direction: column; gap: 8px; }
@@ -427,7 +504,8 @@
             </div>
             <!-- Desktop Sidebar Toggle Moved Here -->
             <button class="sidebar-toggle-desktop" id="sidebar-toggle-desktop" title="Toggle Sidebar">
-                <i class="fas fa-bars-staggered fa-fw"></i>
+                 <!-- Changed icon -->
+                <i class="fas fa-arrow-left-long fa-fw"></i>
             </button>
         </div>
         <div class="sidebar-nav-container">
@@ -719,11 +797,13 @@
             publicPage.style.display = 'none';
             adminPage.style.display = 'block';
             addLinkForm.reset(); // Clear the form
-            // Update breadcrumbs
-            const adminCrumb = document.createElement('li');
-            adminCrumb.id = 'admin-crumb';
-            adminCrumb.textContent = 'Add Link';
-            breadcrumbList.appendChild(adminCrumb);
+            // Update breadcrumbs only if not already present
+            if (!document.getElementById('admin-crumb')) {
+                const adminCrumb = document.createElement('li');
+                adminCrumb.id = 'admin-crumb';
+                adminCrumb.textContent = 'Add Link';
+                breadcrumbList.appendChild(adminCrumb);
+            }
         }
         
         function showPublicPage() {
@@ -812,6 +892,7 @@
         // --- Open Add/Edit Category Modal ---
         function openCategoryEditModal(categoryId = null) {
             categoryEditForm.reset();
+            categoryEditColor.value = '#60A5FA'; // Reset color picker default
             if (categoryId) {
                 // Editing existing category
                 const category = allCategoriesData.find(c => c.id === categoryId);
@@ -840,12 +921,22 @@
             categorySaveBtn.textContent = 'Saving...';
 
             const categoryData = {
-                name: categoryEditName.value,
-                icon: categoryEditIcon.value,
+                name: categoryEditName.value.trim(), // Trim whitespace
+                icon: categoryEditIcon.value.trim(),
                 color: categoryEditColor.value,
             };
             const catId = categoryEditId.value;
             const originalName = categoryEditOriginalName.value;
+
+             // Basic validation
+            if (!categoryData.name || !categoryData.icon) {
+                console.error("Category name and icon cannot be empty.");
+                // Add user feedback here (e.g., show an error message in the modal)
+                categorySaveBtn.disabled = false;
+                categorySaveBtn.textContent = 'Save Category';
+                return;
+            }
+
 
             try {
                 if (catId) {
@@ -924,7 +1015,7 @@
                 // Refresh UI
                 await fetchAllData();
                 populateCategories();
-                populateCategoryTable();
+                populateCategoryTable(); // Repopulate table in list modal
                 
                 // If the deleted category was the active one, switch to 'All'
                 if (currentCategory === category.name) {
@@ -950,9 +1041,12 @@
 
             try {
                 await deleteDoc(doc(db, "links", idToDelete));
-                // After deletion, refetch all data and update UI
-                await fetchAllData();
+                // Remove the link from the local cache to avoid full refetch
+                 allLinksData = allLinksData.filter(link => link.id !== idToDelete);
+                // Update UI directly from cache
                 fetchAndDisplayLinks(currentCategory);
+                console.log(`Link ${idToDelete} deleted successfully.`);
+
             } catch (error) {
                 console.error("Error deleting link: ", error);
             }
@@ -976,6 +1070,12 @@
                 li.innerHTML = `<a href="#" data-category="${cat.name}">
                     <i class="${cat.icon} fa-fw"></i> <span>${cat.name}</span>
                 </a>`;
+                 // Set active class if it matches currentCategory
+                if (cat.name === currentCategory) {
+                    // Remove active from 'All Links' if necessary
+                     document.querySelector('.sidebar-nav li.active')?.classList.remove('active');
+                    li.classList.add('active');
+                }
                 sidebarNav.appendChild(li);
 
                 // Add to admin dropdown
@@ -984,6 +1084,11 @@
                 option.textContent = cat.name;
                 linkCategorySelect.appendChild(option);
             });
+
+            // Ensure 'All Links' is active if currentCategory is 'All'
+            if (currentCategory === 'All' && !document.querySelector('.sidebar-nav li.active')) {
+                 document.querySelector('.sidebar-nav li a[data-category="All"]')?.parentElement.classList.add('active');
+            }
         }
         
         // --- Sidebar Category Click Logic ---
@@ -1026,6 +1131,9 @@
                 return;
             }
             
+             // Sort links alphabetically by name within the category
+            linksToDisplay.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
             linksToDisplay.forEach(linkData => {
                 const { id, name, category, url } = linkData; // ColorCode removed from link data
                 const categoryInfo = allCategoriesData.find(c => c.name === category);
@@ -1081,14 +1189,25 @@
         
         // --- Search Bar Logic ---
         function filterLinksBySearch() {
-            const searchTerm = searchInput.value.toLowerCase();
+            const searchTerm = searchInput.value.toLowerCase().trim(); // Trim whitespace
             const allCards = linksContainer.querySelectorAll('.link-card');
             let visibleCount = 0;
-            
+            const noResultsMsg = linksContainer.querySelector('.no-search-results'); // Get message element once
+
+             // Clear previous no results message if search term is empty and cards exist
+             if (searchTerm === '' && noResultsMsg) {
+                 noResultsMsg.style.display = 'none';
+             }
+
             allCards.forEach(card => {
                 const name = card.dataset.name || '';
                 const category = card.dataset.category || '';
-                const isVisible = name.includes(searchTerm) || category.includes(searchTerm);
+                // Check if card belongs to the current category filter *before* searching
+                const inCurrentCategory = (currentCategory === 'All') || ((card.dataset.category || 'general') === currentCategory.toLowerCase());
+                
+                const matchesSearch = searchTerm === '' || name.includes(searchTerm) || category.includes(searchTerm);
+                
+                const isVisible = inCurrentCategory && matchesSearch;
                 
                 card.classList.toggle('hidden', !isVisible);
                 if (isVisible) {
@@ -1096,34 +1215,46 @@
                 }
             });
 
-            // Show/hide no results message
-            const noResultsMsg = linksContainer.querySelector('.no-search-results');
-            if (allCards.length > 0 && visibleCount === 0) {
+            // Show/hide no results message based on search *within the current category*
+             if (visibleCount === 0 && linksContainer.children.length > 0) { // Check if cards were rendered at all
+                 const baseMsg = `No links found${currentCategory === 'All' ? '' : ` in "${currentCategory}"`}`;
+                 const searchMsg = searchTerm ? ` matching "${searchInput.value}"` : '';
+
                 if (noResultsMsg) {
-                    noResultsMsg.textContent = `No links match "${searchInput.value}".`;
+                     noResultsMsg.textContent = baseMsg + searchMsg + '.';
                     noResultsMsg.style.display = 'block';
-                } else {
-                    linksContainer.innerHTML = `<p class="no-search-results">No links match "${searchInput.value}".</p>`;
-                }
-            } else if (noResultsMsg && visibleCount > 0) {
-                 noResultsMsg.style.display = 'none';
-            } else if (allCards.length === 0 && !noResultsMsg) {
-                // This case is handled by fetchAndDisplayLinks
-            }
+                 } else if (linksContainer.innerHTML.trim() === '') { // Only add if container is truly empty
+                     linksContainer.innerHTML = `<p class="no-search-results">${baseMsg}${searchMsg}.</p>`;
+                 } else if (!linksContainer.querySelector('.no-search-results')) { // Add if not present
+                     const p = document.createElement('p');
+                     p.className = 'no-search-results';
+                     p.textContent = baseMsg + searchMsg + '.';
+                     linksContainer.prepend(p); // Prepend to show at top
+                 }
+             } else if (noResultsMsg) {
+                 noResultsMsg.style.display = 'none'; // Hide if there are results
+             }
         }
         searchInput.addEventListener('input', filterLinksBySearch);
 
         
         // --- Fetch All Data (Main Loader) ---
         async function fetchAllData() {
+            linksContainer.innerHTML = '<p class="no-search-results">Loading links...</p>'; // Show loading state
             try {
-                // Fetch Categories
+                // Fetch Categories first
                 const categorySnapshot = await getDocs(categoriesCollectionRef);
                 allCategoriesData = categorySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 // Fetch Links
                 const linksSnapshot = await getDocs(linksCollectionRef);
                 allLinksData = linksSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                console.log("Data fetched:", { categories: allCategoriesData.length, links: allLinksData.length });
+                 // Ensure UI updates happen after data is ready
+                populateCategories(); 
+                fetchAndDisplayLinks(currentCategory); 
+
             } catch (error) {
                 console.error("Error fetching data: ", error);
                 linksContainer.innerHTML = `<p class='no-search-results'>Error fetching data. Check console.</p>`;
@@ -1137,28 +1268,46 @@
             submitBtn.textContent = 'Adding...';
 
             const newLink = {
-                name: linkName.value,
+                name: linkName.value.trim(),
                 category: linkCategorySelect.value || "General",
-                url: linkUrl.value,
+                url: linkUrl.value.trim(),
                 // colorCode is no longer used, category color is used instead
             };
 
+            // Basic validation
+             if (!newLink.name || !newLink.url) {
+                 console.error("Link name and URL cannot be empty.");
+                 // Add user feedback here
+                 submitBtn.disabled = false;
+                 submitBtn.textContent = 'Add Link';
+                 return;
+             }
+             // Basic URL validation (can be more robust)
+             try {
+                 new URL(newLink.url);
+             } catch (_) {
+                 console.error("Invalid URL format.");
+                  // Add user feedback here
+                 submitBtn.disabled = false;
+                 submitBtn.textContent = 'Add Link';
+                 return;
+             }
+
             try {
-                await addDoc(linksCollectionRef, newLink);
-                
-                // After adding, refetch all data
-                await fetchAllData();
+                const docRef = await addDoc(linksCollectionRef, newLink);
+                console.log("Link added with ID: ", docRef.id);
+
+                 // Add the new link to the local cache immediately
+                allLinksData.push({ id: docRef.id, ...newLink });
                 
                 // Set the current category to the one just added
                 currentCategory = newLink.category;
                 
                 // Update sidebar active state
-                document.querySelector('.sidebar-nav li.active')?.classList.remove('active');
-                const newActiveLink = document.querySelector(`.sidebar-nav li a[data-category="${currentCategory}"]`);
-                newActiveLink?.parentElement.classList.add('active');
+                populateCategories(); // Repopulate to include active state correctly
                 
                 // Switch back to public page to see the new link
-                showPublicPage(); // This will also call fetchAndDisplayLinks
+                showPublicPage(); // This will also call fetchAndDisplayLinks from cache
 
             } catch (error) {
                 console.error("Error adding link: ", error);
@@ -1187,9 +1336,8 @@
                 }
 
                 await signInAnonymously(auth);
-                await fetchAllData(); // Fetches both categories and links now
-                populateCategories(); // Populates sidebar and admin dropdown
-                fetchAndDisplayLinks(currentCategory); 
+                await fetchAllData(); // Fetches categories and links, then updates UI
+                 
             } catch (error) {
                 console.error("Error initializing Firebase: ", error);
                  linksContainer.innerHTML = `<p class='no-search-results'>Error connecting to service: ${error.message}. Please check console and ensure Firestore rules are configured.</p>`;
@@ -1201,3 +1349,4 @@
     </script>
 </body>
 </html>
+
