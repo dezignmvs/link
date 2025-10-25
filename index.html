@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyLinks Dashboard</title>
-    <!-- Iconify for icons -->
-    <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
-    <!-- Font: Satoshi -->
-    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+    <title>Mvs | Dashboard (Links)</title>
+    <!-- Iconify for icons --><script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <!-- Font: Nippo, Satoshi --><link href="https://api.fontshare.com/v2/css?f[]=nippo@500,600,700&f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
 
     <style>
         /* Original Structure + New Theme */
         :root {
             /* Font */
+            /* UPDATED: Satoshi is explicitly the main font, Nippo for headings/accents if needed */
             --font-main: 'Satoshi', sans-serif;
+            --font-heading: 'Nippo', 'Satoshi', sans-serif;
+
 
             /* Light Theme Colors */
             --light-bg-body: #f4f7fe;
@@ -72,7 +73,8 @@
             transition: background-color var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease);
             overflow-x: hidden; font-size: 14px;
         }
-        h1, h2, h3, h4, h5, h6 { margin: 0; color: var(--light-text-primary); font-family: var(--font-main); font-weight: 600; }
+        /* UPDATED: Headings use Nippo, if defined, otherwise Satoshi */
+        h1, h2, h3, h4, h5, h6 { margin: 0; color: var(--light-text-primary); font-family: var(--font-heading); font-weight: 600; }
         ::placeholder { color: var(--light-text-placeholder); opacity: 1; }
         /* Iconify Base Style */
         .iconify { vertical-align: -0.125em; /* Better alignment */ line-height: 1; }
@@ -87,8 +89,11 @@
         body.dark-theme .sidebar-logo { border-bottom-color: var(--dark-border-color); color: var(--dark-text-primary);}
         body.dark-theme .sidebar-nav a { color: var(--dark-text-secondary); }
         body.dark-theme .sidebar-nav a:hover { background-color: var(--dark-bg-hover); color: var(--dark-text-primary); }
-        body.dark-theme .sidebar-nav li.active a { background-color: var(--accent-green); color: #fff; box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
-        body.dark-theme .sidebar-nav li.active a .iconify { color: #fff; }
+        /* Dark theme active sidebar item */
+        body.dark-theme .sidebar-nav li.active a {
+            background-color: transparent; /* Remove background */
+            box-shadow: none; /* Remove box shadow */
+        }
 
         body.dark-theme .sidebar-toggle-desktop, body.dark-theme .mobile-sidebar-toggle, body.dark-theme .header-icon-button, body.dark-theme .back-btn, body.dark-theme .customize-btn {
             background-color: transparent; border: 1px solid var(--dark-border-color); color: var(--dark-text-secondary);
@@ -106,6 +111,18 @@
         body.dark-theme .link-card .card-header { border-bottom-color: var(--dark-border-color); background: linear-gradient(to right, rgba(255,255,255,0.03), rgba(255,255,255,0)); }
         body.dark-theme .link-card .card-title { color: var(--dark-text-primary); }
         body.dark-theme .link-card .card-subtitle { color: var(--dark-text-secondary); }
+
+        /* UPDATED: Dark theme card-initial-circle styling */
+        body.dark-theme .link-card .card-initial-circle {
+             background-color: var(--card-category-color, transparent);
+             border-color: var(--card-category-color, var(--dark-border-color));
+             color: #fff; /* Default icon color for dark theme against colored bg */
+         }
+        /* Ensure the icon within the circle gets its default dark theme color if .keep-default-icon-color is present */
+        body.dark-theme .link-card .card-initial-circle .iconify.keep-default-icon-color {
+             color: var(--dark-text-secondary) !important;
+        }
+
         body.dark-theme .link-card .delete-btn { color: var(--dark-text-secondary); background-color: rgba(255, 255, 255, 0.1);}
         body.dark-theme .link-card .delete-btn:hover { background-color: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
         body.dark-theme .view-btn { border: 1px solid var(--accent-blue); background: transparent; color: var(--accent-blue); }
@@ -181,10 +198,21 @@
 
         .sidebar-nav-title { font-size: 0.7rem; font-weight: 600; color: var(--light-text-secondary); text-transform: uppercase; letter-spacing: 0.8px; padding: 16px 10px 8px; white-space: nowrap; overflow: hidden; transition: opacity 0.1s ease; }
         .sidebar-nav { list-style: none; padding: 0; margin: 0; }
-        .sidebar-nav li a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 6px; text-decoration: none; font-weight: 500; color: var(--light-text-secondary); transition: background var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease); white-space: nowrap; overflow: hidden; font-size: 0.9rem; position: relative; margin-bottom: 4px; }
-        .sidebar-nav li a:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); }
-        .sidebar-nav li.active a { background-color: var(--accent-green); color: #fff; box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
-        .sidebar-nav li.active a .iconify { color: #fff; } /* Updated selector */
+        /* Make all sidebar links have a transparent background initially */
+        .sidebar-nav li a {
+            display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 6px; text-decoration: none; font-weight: 500;
+            color: var(--light-text-secondary);
+            transition: background var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease), border-color var(--transition-speed) var(--transition-ease);
+            white-space: nowrap; overflow: hidden; font-size: 0.9rem; position: relative; margin-bottom: 4px;
+            background-color: transparent; /* Ensure default background is transparent */
+            border: 1px solid transparent; /* Add transparent border for smooth transition */
+        }
+        .sidebar-nav li a:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); border-color: transparent;}
+        /* Active sidebar item style */
+        .sidebar-nav li.active a {
+            background-color: transparent; /* Ensure active background is transparent */
+            box-shadow: none; /* Remove box shadow */
+        }
         .sidebar-nav li a .iconify { font-size: 1.1rem; width: 1.5em; text-align: center; flex-shrink: 0; transition: color var(--transition-speed) var(--transition-ease); } /* Updated selector */
 
         /* Mini Sidebar Styles */
@@ -257,7 +285,27 @@
         .link-card.hidden { display: none; }
         .link-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px var(--light-shadow-color); }
         .card-header { padding: 16px; border-bottom: 1px solid var(--light-border-color); min-height: 60px; background-color: transparent; display: flex; justify-content: space-between; align-items: center; }
-        .card-initial-circle { background-color: var(--accent-green); width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: var(--font-main);}
+
+        /* UPDATED: Card icon circle style - now explicitly setting background and border */
+        .card-initial-circle {
+            /* Use a CSS variable that JS will set */
+            --card-category-color: var(--light-text-secondary); /* Default color */
+            background-color: var(--card-category-color);
+            border: 1px solid var(--card-category-color);
+            width: 36px; height: 36px; border-radius: 50%;
+            font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: var(--font-main);
+            color: #fff; /* Default icon color (white) against colored background */
+        }
+        /* NEW: Class to keep icon's default (theme-based) color */
+        .card-initial-circle .iconify.keep-default-icon-color {
+            color: var(--light-text-secondary) !important; /* Forces light theme secondary color */
+        }
+        /* Override for dark theme */
+        body.dark-theme .card-initial-circle .iconify.keep-default-icon-color {
+            color: var(--dark-text-secondary) !important; /* Forces dark theme secondary color */
+        }
+
+
         .delete-btn { background-color: transparent; color: var(--light-text-secondary); border: none; font-size: 1rem; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s, color 0.2s, transform 0.1s ease; cursor: pointer;}
         .delete-btn:hover { background-color: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
         .card-content { flex-grow: 1; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -417,7 +465,7 @@
         <div class="sidebar-logo">
             <div class="sidebar-logo-content">
                 <span class="iconify" data-icon="mdi:layer-group"></span>
-                <span class="sidebar-logo-text">MyLinks</span>
+                <span class="sidebar-logo-text">Dezign.mvs</span>
             </div>
             <!-- Desktop Sidebar Toggle -->
             <button class="sidebar-toggle-desktop" id="sidebar-toggle-desktop" title="Toggle Sidebar">
@@ -427,7 +475,8 @@
         <div class="sidebar-nav-container">
              <div class="sidebar-nav-title">Navigation</div>
              <ul class="sidebar-nav" id="sidebar-nav">
-                 <li><a href="#" data-category="All" class="active"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
+                 <!-- The 'All Links' item needs explicit styling if it's active -->
+                 <li data-category="All"><a href="#" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
                  <!-- Categories populated by JS -->
              </ul>
         </div>
@@ -552,7 +601,6 @@
     <!-- Javascript (Implementations Added) -->
     <script type="module">
         // --- Firebase Imports ---
-        // CORRECTED: Removed extra dot from firebase-app..js
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, deleteDoc, doc, setLogLevel, updateDoc, writeBatch, query, where, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -623,18 +671,21 @@
 
         let allLinksData = []; let allCategoriesData = []; let currentCategory = 'All';
         const mobileBreakpoint = 992;
+        const categoryToKeepDefaultIcon = 'User'; // Define the category name here
 
         // --- Theme Toggle Logic ---
         function applyTheme(isDark) {
              const themeIcon = isDark ? 'mdi:weather-sunny' : 'mdi:moon-waning-crescent';
-             if (isDark) { 
-                 body.classList.add('dark-theme'); 
-                 localStorage.setItem('theme', 'dark'); 
-            } else { 
-                 body.classList.remove('dark-theme'); 
-                 localStorage.setItem('theme', 'light'); 
+             if (isDark) {
+                 body.classList.add('dark-theme');
+                 localStorage.setItem('theme', 'dark');
+            } else {
+                 body.classList.remove('dark-theme');
+                 localStorage.setItem('theme', 'light');
             }
             if(themeToggleBtn) themeToggleBtn.innerHTML = `<span class="iconify" data-icon="${themeIcon}"></span>`;
+            // Re-apply sidebar styles after theme change
+            updateSidebarActiveState();
          }
         if(themeToggleBtn) themeToggleBtn.addEventListener('click', () => applyTheme(!body.classList.contains('dark-theme')));
 
@@ -802,7 +853,7 @@
             const q = query(linksCollectionRef, where("category", "==", oldName));
             try {
                 // Use getDocs for a one-time update operation
-                const querySnapshot = await getDocs(q); 
+                const querySnapshot = await getDocs(q);
                 querySnapshot.forEach(doc => {
                     batch.update(doc.ref, { category: newName });
                 });
@@ -868,7 +919,7 @@
                 }
                 closeModal('category-edit-modal');
                 // The onSnapshot listener will repopulate the table, so just open the list modal
-                openModal('category-list-modal'); 
+                openModal('category-list-modal');
             } catch (error) {
                 console.error("Error saving category: ", error);
             } finally {
@@ -913,16 +964,21 @@
         // --- Populate Categories (Sidebar & Admin Dropdown) ---
         function populateCategories() {
             // 1. Clear Sidebar (keeping "All Links")
-            sidebarNav.innerHTML = `<li class="active"><a href="#" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>`;
+             // UPDATED: Use a list item for 'All Links' as well
+             sidebarNav.innerHTML = `<li data-category="All"><a href="#" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>`;
+
             // 2. Clear Admin Dropdown
             linkCategorySelect.innerHTML = '<option value="Uncategorized">Uncategorized</option>';
 
             // 3. Sort and Populate
             const sortedCategories = [...allCategoriesData].sort((a, b) => a.name.localeCompare(b.name));
-            
+
             sortedCategories.forEach(cat => {
                 // Add to sidebar
                 const li = document.createElement('li');
+                // Store category color in data attribute for easy access
+                li.dataset.category = cat.name;
+                li.dataset.color = cat.color;
                 li.innerHTML = `<a href="#" data-category="${cat.name}"><span class="iconify" data-icon="${cat.icon}" data-fw="true" style="color: ${cat.color};"></span><span>${cat.name}</span></a>`;
                 sidebarNav.appendChild(li);
 
@@ -940,16 +996,42 @@
         // --- Update Sidebar Active State ---
         function updateSidebarActiveState() {
             const links = sidebarNav.querySelectorAll('li');
+            const computedStyle = getComputedStyle(body);
+            const defaultActiveColor = body.classList.contains('dark-theme')
+                ? computedStyle.getPropertyValue('--dark-text-secondary').trim()
+                : computedStyle.getPropertyValue('--light-text-secondary').trim();
+            const defaultAllLinkBorder = body.classList.contains('dark-theme')
+                ? computedStyle.getPropertyValue('--dark-border-color').trim()
+                : computedStyle.getPropertyValue('--light-border-color').trim();
+
             links.forEach(li => {
                 const a = li.querySelector('a');
-                if (a && a.dataset.category === currentCategory) {
-                    li.classList.add('active');
-                } else {
-                    li.classList.remove('active');
+                if (a) {
+                    // Reset styles first
+                    a.style.borderColor = 'transparent';
+                    a.style.color = ''; // Reset to default CSS color
+                    const icon = a.querySelector('.iconify');
+                    if (icon) {
+                        // Reset icon color - use category color unless it's 'All'
+                        icon.style.color = (li.dataset.category !== 'All' && li.dataset.color) ? li.dataset.color : '';
+                    }
+
+                    if (li.dataset.category === currentCategory) {
+                        li.classList.add('active');
+                        // Use category color for border and text, or default for 'All'
+                        const activeColor = li.dataset.color || defaultActiveColor;
+                        const borderColor = li.dataset.color || defaultAllLinkBorder; // Use category color for border, fallback for 'All'
+                        a.style.borderColor = borderColor;
+                        a.style.color = activeColor; // Set text color
+                        if (icon) icon.style.color = activeColor; // Match icon color
+                    } else {
+                        li.classList.remove('active');
+                    }
                 }
             });
         }
-        
+
+
         // --- Update Breadcrumbs ---
         function updateBreadcrumbs(category) {
             breadcrumbList.innerHTML = '<li><a href="#">MyLinks</a></li>';
@@ -971,7 +1053,7 @@
                 updateSidebarActiveState();
                 updateBreadcrumbs(categoryName);
                 renderLinks(currentCategory); // Render from local data
-                
+
                 // If on mobile, close sidebar after click
                 if (window.innerWidth < mobileBreakpoint) {
                     sidebar.classList.remove('active');
@@ -982,9 +1064,9 @@
 
         // --- Create a single Link Card element ---
         function createLinkCard(link) {
-            const defaultCat = { icon: 'mdi:link', color: '#718096' }; // Default Iconify icon
+            const defaultCat = { name: 'Uncategorized', icon: 'mdi:link', color: '#718096' }; // Default Iconify icon and color
             const cat = allCategoriesData.find(c => c.name === link.category) || defaultCat;
-            
+
             const card = document.createElement('div');
             card.className = 'link-card';
             card.dataset.id = link.id;
@@ -1007,13 +1089,28 @@
                     </a>
                 </div>
             `;
-            
-            // Set styles and listeners
-            card.querySelector('.card-initial-circle').style.backgroundColor = cat.color;
+
+            // UPDATED: Set styles and listeners for the card icon circle
+            const circle = card.querySelector('.card-initial-circle');
+            const icon = circle.querySelector('.iconify');
+
+            // Set the CSS variable for background and border color
+            circle.style.setProperty('--card-category-color', cat.color);
+
+            // Check if this category's icon should keep the default color
+            if (cat.name === categoryToKeepDefaultIcon) {
+                 icon.classList.add('keep-default-icon-color');
+            } else {
+                 icon.classList.remove('keep-default-icon-color'); // Ensure class is removed otherwise
+                 // Set icon color to white for contrast against background
+                 icon.style.color = '#fff'; // Explicitly set white for non-default cases
+            }
+
+
             // Sanitize title and subtitle to prevent XSS
             card.querySelector('.card-title').textContent = link.name;
             card.querySelector('.card-subtitle').textContent = link.url;
-            
+
             card.querySelector('.delete-btn').addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation(); // Prevent link navigation
@@ -1059,7 +1156,7 @@
                 const title = card.querySelector('.card-title').textContent.toLowerCase();
                 const subtitle = card.querySelector('.card-subtitle').textContent.toLowerCase();
                 const isVisible = title.includes(searchTerm) || subtitle.includes(searchTerm);
-                
+
                 card.classList.toggle('hidden', !isVisible);
                 if (isVisible) visibleCount++;
             });
@@ -1095,10 +1192,10 @@
             categoriesUnsubscribe = onSnapshot(categoriesCollectionRef, (snapshot) => {
                 console.log("Categories snapshot received");
                 allCategoriesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
+
                 populateCategories(); // Update sidebar and dropdown
                 renderLinks(currentCategory); // Re-render links to apply new colors/icons
-                
+
                 // Only update table if modal is open, to avoid layout shifts
                 if (categoryListModal.classList.contains('active')) {
                    populateCategoryTable(); // Update category management table
@@ -1112,7 +1209,7 @@
             linksUnsubscribe = onSnapshot(linksCollectionRef, (snapshot) => {
                 console.log("Links snapshot received");
                 allLinksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
+
                 renderLinks(currentCategory); // Re-render links
             }, (error) => {
                 console.error("Error fetching links:", error);
