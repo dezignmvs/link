@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyLinks Dashboard</title>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Font: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Iconify for icons -->
+    <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <!-- Font: Satoshi -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
 
     <style>
         /* Original Structure + New Theme */
         :root {
             /* Font */
-            --font-main: 'Inter', sans-serif;
+            --font-main: 'Satoshi', sans-serif;
 
             /* Light Theme Colors */
             --light-bg-body: #f4f7fe;
@@ -76,7 +74,8 @@
         }
         h1, h2, h3, h4, h5, h6 { margin: 0; color: var(--light-text-primary); font-family: var(--font-main); font-weight: 600; }
         ::placeholder { color: var(--light-text-placeholder); opacity: 1; }
-        i.fas { vertical-align: middle; line-height: 1; }
+        /* Iconify Base Style */
+        .iconify { vertical-align: -0.125em; /* Better alignment */ line-height: 1; }
 
         /* --- Dark Theme Overrides --- */
         body.dark-theme { background-color: var(--dark-bg-body); color: var(--dark-text-primary); }
@@ -89,7 +88,7 @@
         body.dark-theme .sidebar-nav a { color: var(--dark-text-secondary); }
         body.dark-theme .sidebar-nav a:hover { background-color: var(--dark-bg-hover); color: var(--dark-text-primary); }
         body.dark-theme .sidebar-nav li.active a { background-color: var(--accent-green); color: #fff; box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
-        body.dark-theme .sidebar-nav li.active a i { color: #fff; }
+        body.dark-theme .sidebar-nav li.active a .iconify { color: #fff; }
 
         body.dark-theme .sidebar-toggle-desktop, body.dark-theme .mobile-sidebar-toggle, body.dark-theme .header-icon-button, body.dark-theme .back-btn, body.dark-theme .customize-btn {
             background-color: transparent; border: 1px solid var(--dark-border-color); color: var(--dark-text-secondary);
@@ -144,7 +143,7 @@
              width: calc(100% - var(--sidebar-width-full));
              transition: width var(--transition-speed) var(--transition-ease);
              position: relative;
-         }
+        }
         .app-container.sidebar-mini { width: calc(100% - var(--sidebar-width-mini)); }
         .app-main-content { flex-grow: 1; padding: 24px; padding-bottom: 40px; max-width: 100%; }
         .container { max-width: 1200px; margin: 0 auto; }
@@ -163,7 +162,7 @@
             gap: 12px; overflow: hidden; position: relative; border-bottom: 1px solid var(--light-border-color); height: 60px;
         }
         .sidebar-logo-content { display: flex; align-items: center; gap: 10px; overflow: hidden; flex-grow: 1; }
-        .sidebar-logo i.fa-layer-group { color: var(--accent-green); font-size: 1.6rem; }
+        .sidebar-logo .iconify { color: var(--accent-green); font-size: 1.6rem; } /* Updated selector */
         .sidebar-logo-text { transition: opacity 0.1s ease, transform 0.2s ease; white-space: nowrap; margin-left: 5px; transform: translateX(0); }
 
         /* Sidebar Toggle Desktop - Original Position */
@@ -185,8 +184,8 @@
         .sidebar-nav li a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 6px; text-decoration: none; font-weight: 500; color: var(--light-text-secondary); transition: background var(--transition-speed) var(--transition-ease), color var(--transition-speed) var(--transition-ease), box-shadow var(--transition-speed) var(--transition-ease); white-space: nowrap; overflow: hidden; font-size: 0.9rem; position: relative; margin-bottom: 4px; }
         .sidebar-nav li a:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); }
         .sidebar-nav li.active a { background-color: var(--accent-green); color: #fff; box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3); }
-        .sidebar-nav li.active a i { color: #fff; }
-        .sidebar-nav li a i { font-size: 1.1rem; width: 1.5em; text-align: center; flex-shrink: 0; transition: color var(--transition-speed) var(--transition-ease); }
+        .sidebar-nav li.active a .iconify { color: #fff; } /* Updated selector */
+        .sidebar-nav li a .iconify { font-size: 1.1rem; width: 1.5em; text-align: center; flex-shrink: 0; transition: color var(--transition-speed) var(--transition-ease); } /* Updated selector */
 
         /* Mini Sidebar Styles */
         .app-sidebar.mini { width: var(--sidebar-width-mini); }
@@ -198,7 +197,7 @@
         .app-sidebar.mini .sidebar-nav-title { opacity: 0; height: 0; padding: 0; margin: 0; overflow: hidden; }
         .app-sidebar.mini .sidebar-nav li a { justify-content: center; padding: 12px 10px; }
         .app-sidebar.mini .sidebar-nav li a span { opacity: 0; width: 0; visibility: hidden; height: 0; overflow: hidden; }
-        .app-sidebar.mini .sidebar-nav li a i { margin: 0; width: auto; font-size: 1.3rem; }
+        .app-sidebar.mini .sidebar-nav li a .iconify { margin: 0; width: auto; font-size: 1.3rem; } /* Updated selector */
 
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 999; opacity: 0; visibility: hidden; transition: opacity var(--transition-speed) var(--transition-ease), visibility 0s var(--transition-speed); }
         .sidebar-overlay.active { opacity: 1; visibility: visible; transition: opacity var(--transition-speed) var(--transition-ease), visibility 0s 0s; }
@@ -209,7 +208,7 @@
              background-color: var(--light-bg-header); border-bottom: 1px solid var(--light-border-color);
              flex-shrink: 0; box-shadow: 0 1px 3px var(--light-shadow-color); height: 60px;
              transition: background-color var(--transition-speed) var(--transition-ease), border-color var(--transition-speed) var(--transition-ease);
-         }
+        }
         .header-left { display: flex; align-items: center; gap: 16px; }
         .header-controls { display: flex; gap: 12px; align-items: center; margin-left: auto; }
 
@@ -219,14 +218,14 @@
              width: 38px; height: 38px; border-radius: 6px; font-size: 1.1rem; cursor: pointer;
              display: none; align-items: center; justify-content: center;
              transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
-         }
+        }
          .mobile-sidebar-toggle:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); border-color: var(--light-text-secondary); }
 
         .search-bar { position: relative; max-width: 350px; flex-grow: 1; }
-        .search-bar .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--light-text-secondary); font-size: 1.1rem; }
+        .search-bar .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--light-text-secondary); font-size: 1.2rem; } /* Adjusted size */
         .search-bar input { width: 100%; padding: 8px 12px 8px 40px; background-color: var(--light-bg-input); border: 1px solid var(--light-border-color); border-radius: 6px; color: var(--light-text-primary); font-family: var(--font-main); font-size: 0.9rem; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; }
         .search-bar input:focus { outline: none; border-color: var(--accent-indigo); background-color: var(--light-bg-card); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
-        .header-icon-button { background-color: var(--light-bg-card); color: var(--light-text-secondary); border: 1px solid var(--light-border-color); width: 38px; height: 38px; border-radius: 6px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, border-color 0.2s ease; }
+        .header-icon-button { background-color: var(--light-bg-card); color: var(--light-text-secondary); border: 1px solid var(--light-border-color); width: 38px; height: 38px; border-radius: 6px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, border-color 0.2s ease; }
         .header-icon-button:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); border-color: var(--light-text-secondary); }
 
          /* --- App Breadcrumbs (Restored) --- */
@@ -235,7 +234,7 @@
              border-bottom: 1px solid var(--light-border-color); flex-shrink: 0;
              transition: background-color var(--transition-speed) var(--transition-ease), border-color var(--transition-speed) var(--transition-ease);
              font-size: 0.85rem; box-shadow: 0 1px 2px var(--light-shadow-color);
-         }
+        }
         .app-breadcrumbs ul { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 8px; }
         .app-breadcrumbs li { color: var(--light-text-secondary); }
         .app-breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: 8px; color: var(--light-text-secondary); opacity: 0.6; }
@@ -265,7 +264,7 @@
         .card-title { font-size: 0.95rem; font-weight: 600; color: var(--light-text-primary); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .card-subtitle { font-size: 0.8rem; color: var(--light-text-secondary); margin-bottom: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .view-btn { color: var(--accent-blue); background-color: rgba(59, 130, 246, 0.1); border: 1px solid transparent; width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; text-decoration: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background-color 0.2s ease, transform 0.1s ease, color 0.2s ease; margin-top: auto; }
-        .view-btn i { font-size: 0.9em; }
+        .view-btn .iconify { font-size: 0.9em; } /* Updated selector */
         .view-btn:hover { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; }
 
         /* --- Admin Form Page --- */
@@ -276,7 +275,7 @@
         .back-btn:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); }
         .customize-btn { background-color: var(--light-bg-input); color: var(--light-text-secondary); border: 1px solid var(--light-border-color); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: background-color 0.2s, color 0.2s, transform 0.1s ease, border-color 0.2s; flex-shrink: 0; }
         .customize-btn:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); border-color: var(--light-text-secondary); }
-        .customize-btn i { font-size: 1.1em; }
+        .customize-btn .iconify { font-size: 1.1em; } /* Updated selector */
         .customize-btn span { transition: display 0s; }
         .form-group { margin-bottom: 16px; }
         .form-group label { display: block; margin-bottom: 6px; font-weight: 500; color: var(--light-text-secondary); font-size: 0.85rem; }
@@ -360,32 +359,32 @@
 
         /* --- Mobile Responsive Adjustments --- */
          @media (max-width: 992px) { /* Tablet breakpoint */
-              .app-container { width: 100% !important; padding-left: 0 !important; }
-              .app-sidebar { position: fixed; transform: translateX(-100%); width: var(--sidebar-width-full); z-index: 1001; }
-              .app-sidebar.active { transform: translateX(0); }
-              .sidebar-overlay.active { display: block; opacity: 1; visibility: visible; }
-              .app-header { padding: 0 16px; }
-              .search-bar { margin-left: 0; }
-              .dashboard-grid { padding: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;}
-              .link-card { min-height: 150px; }
-              .card-header { min-height: 50px; padding: 12px; }
-              .card-initial-circle { width: 32px; height: 32px; font-size: 1rem; }
-              .delete-btn { width: 30px; height: 30px; font-size: 0.9rem; }
-              .card-content { padding: 12px; }
-              .card-title { font-size: 0.9rem; }
-              .card-subtitle { font-size: 0.75rem; margin-bottom: 12px; }
-              .view-btn { font-size: 0.8rem; padding: 6px 10px; gap: 4px; }
-              .modal { width: 95%; max-width: 95%; padding: 20px; }
-              .app-main-content { padding: 16px; }
-              .sidebar-toggle-desktop { display: none; }
-              .mobile-sidebar-toggle { display: flex; }
-         }
+             .app-container { width: 100% !important; padding-left: 0 !important; }
+             .app-sidebar { position: fixed; transform: translateX(-100%); width: var(--sidebar-width-full); z-index: 1001; }
+             .app-sidebar.active { transform: translateX(0); }
+             .sidebar-overlay.active { display: block; opacity: 1; visibility: visible; }
+             .app-header { padding: 0 16px; }
+             .search-bar { margin-left: 0; }
+             .dashboard-grid { padding: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px;}
+             .link-card { min-height: 150px; }
+             .card-header { min-height: 50px; padding: 12px; }
+             .card-initial-circle { width: 32px; height: 32px; font-size: 1rem; }
+             .delete-btn { width: 30px; height: 30px; font-size: 0.9rem; }
+             .card-content { padding: 12px; }
+             .card-title { font-size: 0.9rem; }
+             .card-subtitle { font-size: 0.75rem; margin-bottom: 12px; }
+             .view-btn { font-size: 0.8rem; padding: 6px 10px; gap: 4px; }
+             .modal { width: 95%; max-width: 95%; padding: 20px; }
+             .app-main-content { padding: 16px; }
+             .sidebar-toggle-desktop { display: none; }
+             .mobile-sidebar-toggle { display: flex; }
+        }
          @media (min-width: 993px) { /* Desktop and larger */
-               .sidebar-overlay { display: none !important; }
-               .app-sidebar.active { transform: none; }
-               .sidebar-toggle-desktop { display: flex; }
-               .mobile-sidebar-toggle { display: none; }
-         }
+             .sidebar-overlay { display: none !important; }
+             .app-sidebar.active { transform: none; }
+             .sidebar-toggle-desktop { display: flex; }
+             .mobile-sidebar-toggle { display: none; }
+        }
 
         @media (max-width: 576px) { /* Smaller mobile screens */
             .app-header { padding: 0 12px; gap: 8px; height: 50px; }
@@ -417,18 +416,18 @@
     <aside class="app-sidebar" id="sidebar">
         <div class="sidebar-logo">
             <div class="sidebar-logo-content">
-                <i class="fas fa-layer-group"></i>
+                <span class="iconify" data-icon="mdi:layer-group"></span>
                 <span class="sidebar-logo-text">MyLinks</span>
             </div>
             <!-- Desktop Sidebar Toggle -->
             <button class="sidebar-toggle-desktop" id="sidebar-toggle-desktop" title="Toggle Sidebar">
-                 <i class="fas fa-bars fa-fw"></i>
+                 <span class="iconify" data-icon="mdi:menu" data-fw="true"></span>
             </button>
         </div>
         <div class="sidebar-nav-container">
              <div class="sidebar-nav-title">Navigation</div>
              <ul class="sidebar-nav" id="sidebar-nav">
-                 <li><a href="#" data-category="All" class="active"><i class="fas fa-th-large fa-fw"></i><span>All Links</span></a></li>
+                 <li><a href="#" data-category="All" class="active"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
                  <!-- Categories populated by JS -->
              </ul>
         </div>
@@ -445,23 +444,23 @@
             <div class="header-left">
                  <!-- Mobile Sidebar Toggle -->
                  <button id="mobile-sidebar-toggle" class="mobile-sidebar-toggle" title="Toggle Sidebar">
-                     <i class="fas fa-bars"></i>
+                     <span class="iconify" data-icon="mdi:menu"></span>
                  </button>
                  <!-- Search Bar -->
                  <div class="search-bar">
-                     <i class="fas fa-search search-icon"></i>
+                     <span class="iconify search-icon" data-icon="mdi:magnify"></span>
                      <input type="text" id="search-input" placeholder="Search links...">
                  </div>
             </div>
             <div class="header-controls">
                 <button id="theme-toggle" class="header-icon-button" title="Toggle Theme">
-                    <i class="fas fa-moon"></i>
+                    <span class="iconify" data-icon="mdi:moon-waning-crescent"></span>
                 </button>
                 <button id="fullscreen-toggle" class="header-icon-button" title="Toggle Fullscreen">
-                    <i class="fas fa-expand"></i>
+                    <span class="iconify" data-icon="mdi:arrow-expand"></span>
                 </button>
                 <button id="add-btn" class="header-icon-button" title="Add Link">
-                    <i class="fas fa-plus"></i>
+                    <span class="iconify" data-icon="mdi:plus"></span>
                 </button>
             </div>
         </header>
@@ -486,9 +485,9 @@
             <div class="container">
                 <div class="admin-form-container">
                     <div class="admin-form-header">
-                        <button id="back-to-public-btn" class="back-btn" title="Back"><i class="fas fa-arrow-left"></i></button>
+                        <button id="back-to-public-btn" class="back-btn" title="Back"><span class="iconify" data-icon="mdi:arrow-left"></span></button>
                         <h2>Add New Link</h2>
-                        <button id="customize-categories-btn" class="customize-btn"><i class="fas fa-cog"></i><span>Customize</span></button>
+                        <button id="customize-categories-btn" class="customize-btn"><span class="iconify" data-icon="mdi:cog"></span><span>Customize</span></button>
                     </div>
                     <form id="add-link-form">
                         <div class="form-group"><label for="link-name">Name</label><input type="text" id="link-name" placeholder="e.g., KULLIYYA CONCEPT NOTE" required></div>
@@ -520,7 +519,7 @@
                 </div>
             </div>
             <div class="modal-actions">
-                 <button id="add-new-category-btn" class="btn-primary"><i class="fas fa-plus"></i> Add New Category</button>
+                 <button id="add-new-category-btn" class="btn-primary"><span class="iconify" data-icon="mdi:plus" style="vertical-align: -0.125em;"></span> Add New Category</button>
                 <button class="btn-secondary modal-close-btn" data-target="category-list-modal">Close</button>
             </div>
         </div>
@@ -537,8 +536,9 @@
                 <input type="hidden" id="category-edit-id">
                 <input type="hidden" id="category-edit-original-name">
                 <div class="modal-content">
+                     <!-- Updated Label and Placeholder for Iconify -->
                      <div class="form-group"><label for="category-edit-name">Category Name</label><input type="text" id="category-edit-name" required></div>
-                     <div class="form-group"><label for="category-edit-icon">Icon Class (Font Awesome)</label><input type="text" id="category-edit-icon" placeholder="e.g., fas fa-book" required></div>
+                     <div class="form-group"><label for="category-edit-icon">Icon Name (Iconify)</label><input type="text" id="category-edit-icon" placeholder="e.g., mdi:book" required></div>
                      <div class="form-group"><label for="category-edit-color">Color</label><input type="color" id="category-edit-color" value="#10b981" required></div>
                 </div>
                 <div class="modal-actions">
@@ -552,9 +552,10 @@
     <!-- Javascript (Implementations Added) -->
     <script type="module">
         // --- Firebase Imports ---
+        // CORRECTED: Removed extra dot from firebase-app..js
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, setLogLevel, updateDoc, writeBatch, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, setLogLevel, updateDoc, writeBatch, query, where, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- Firebase Config ---
          const firebaseConfig = typeof __firebase_config !== 'undefined'
@@ -617,28 +618,34 @@
 
         // --- Theme Toggle Logic ---
         function applyTheme(isDark) {
-             const themeIconClass = isDark ? 'fas fa-sun' : 'fas fa-moon';
-             if (isDark) { body.classList.add('dark-theme'); themeToggleBtn.innerHTML = `<i class="${themeIconClass}"></i>`; localStorage.setItem('theme', 'dark'); }
-             else { body.classList.remove('dark-theme'); themeToggleBtn.innerHTML = `<i class="${themeIconClass}"></i>`; localStorage.setItem('theme', 'light'); }
+             const themeIcon = isDark ? 'mdi:weather-sunny' : 'mdi:moon-waning-crescent';
+             if (isDark) { 
+                 body.classList.add('dark-theme'); 
+                 localStorage.setItem('theme', 'dark'); 
+            } else { 
+                 body.classList.remove('dark-theme'); 
+                 localStorage.setItem('theme', 'light'); 
+            }
+            if(themeToggleBtn) themeToggleBtn.innerHTML = `<span class="iconify" data-icon="${themeIcon}"></span>`;
          }
         if(themeToggleBtn) themeToggleBtn.addEventListener('click', () => applyTheme(!body.classList.contains('dark-theme')));
 
         // --- Fullscreen Toggle Logic ---
         if(fullscreenToggleBtn) fullscreenToggleBtn.addEventListener('click', () => {
              if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.warn(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                });
+                 document.documentElement.requestFullscreen().catch(err => {
+                     console.warn(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                 });
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
+                 if (document.exitFullscreen) {
+                     document.exitFullscreen();
+                 }
             }
         });
         document.addEventListener('fullscreenchange', () => {
             if(fullscreenToggleBtn) {
-                const iconClass = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
-                fullscreenToggleBtn.innerHTML = `<i class="${iconClass}"></i>`;
+                 const icon = document.fullscreenElement ? 'mdi:arrow-collapse' : 'mdi:arrow-expand';
+                 fullscreenToggleBtn.innerHTML = `<span class="iconify" data-icon="${icon}"></span>`;
             }
         });
 
@@ -677,14 +684,14 @@
                  // Desktop behavior: Use sticky sidebar, adjust container width based on mini state
                  sidebar.style.position = 'sticky';
                   if (sidebar.classList.contains('active')) { // Close if slid out from mobile
-                      sidebar.classList.remove('active');
-                      sidebarOverlay.classList.remove('active');
+                       sidebar.classList.remove('active');
+                       sidebarOverlay.classList.remove('active');
                   }
-                appContainer.classList.toggle('sidebar-mini', sidebar.classList.contains('mini'));
-                appContainer.style.width = sidebar.classList.contains('mini')
+                 appContainer.classList.toggle('sidebar-mini', sidebar.classList.contains('mini'));
+                 appContainer.style.width = sidebar.classList.contains('mini')
                    ? `calc(100% - var(--sidebar-width-mini))`
                    : `calc(100% - var(--sidebar-width-full))`;
-                // Show/Hide appropriate toggles
+                 // Show/Hide appropriate toggles
                  if(sidebarToggleDesktop) sidebarToggleDesktop.style.display = 'flex';
                  if(mobileSidebarToggle) mobileSidebarToggle.style.display = 'none';
              }
@@ -734,11 +741,11 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${cat.name}</td>
-                    <td class="icon-preview"><i class="${cat.icon} fa-fw" style="color: ${cat.color};"></i></td>
+                    <td class="icon-preview"><span class="iconify" data-icon="${cat.icon}" data-fw="true" style="color: ${cat.color};"></span></td>
                     <td><div class="color-swatch" style="background-color: ${cat.color};"></div></td>
                     <td class="actions">
-                        <button class="edit-cat-btn" data-id="${cat.id}" title="Edit"><i class="fas fa-pencil-alt"></i></button>
-                        <button class="delete-cat-btn" data-id="${cat.id}" data-name="${cat.name}" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                        <button class="edit-cat-btn" data-id="${cat.id}" title="Edit"><span class="iconify" data-icon="mdi:pencil"></span></button>
+                        <button class="delete-cat-btn" data-id="${cat.id}" data-name="${cat.name}" title="Delete"><span class="iconify" data-icon="mdi:delete"></span></button>
                     </td>
                 `;
                 // Add event listeners for edit/delete
@@ -778,11 +785,16 @@
         // --- Batch update links if category name changes ---
         async function updateLinksOnCategoryRename(oldName, newName) {
             if (oldName === newName) return;
+            if (!db) {
+                console.error("Firestore db instance is not available.");
+                return;
+            }
             console.log(`Batch updating links from category '${oldName}' to '${newName}'...`);
             const batch = writeBatch(db);
             const q = query(linksCollectionRef, where("category", "==", oldName));
             try {
-                const querySnapshot = await getDocs(q);
+                // Use getDocs for a one-time update operation
+                const querySnapshot = await getDocs(q); 
                 querySnapshot.forEach(doc => {
                     batch.update(doc.ref, { category: newName });
                 });
@@ -795,10 +807,15 @@
 
         // --- Batch update links to 'Uncategorized' if category is deleted ---
         async function updateLinksOnCategoryDelete(deletedCategoryName) {
+            if (!db) {
+                console.error("Firestore db instance is not available.");
+                return;
+            }
             console.log(`Batch updating links from deleted category '${deletedCategoryName}' to 'Uncategorized'...`);
             const batch = writeBatch(db);
             const q = query(linksCollectionRef, where("category", "==", deletedCategoryName));
             try {
+                // Use getDocs for a one-time update operation
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach(doc => {
                     batch.update(doc.ref, { category: "Uncategorized" });
@@ -813,12 +830,16 @@
         // --- Save Category (Add or Edit) ---
         if (categoryEditForm) categoryEditForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (!categoriesCollectionRef) {
+                console.error("Categories collection reference is not set.");
+                return;
+            }
             categorySaveBtn.disabled = true;
             categorySaveBtn.textContent = 'Saving...';
 
             const categoryData = {
                 name: categoryEditName.value.trim(),
-                icon: categoryEditIcon.value.trim() || 'fas fa-link',
+                icon: categoryEditIcon.value.trim() || 'mdi:link', // Default Iconify icon
                 color: categoryEditColor.value
             };
             const categoryId = categoryEditId.value;
@@ -838,7 +859,8 @@
                     await addDoc(categoriesCollectionRef, categoryData);
                 }
                 closeModal('category-edit-modal');
-                openModal('category-list-modal'); // Re-open list modal
+                // The onSnapshot listener will repopulate the table, so just open the list modal
+                openModal('category-list-modal'); 
             } catch (error) {
                 console.error("Error saving category: ", error);
             } finally {
@@ -849,6 +871,10 @@
 
         // --- Delete Category ---
         async function deleteCategory(categoryId, categoryName) {
+            if (!categoriesCollectionRef) {
+                console.error("Categories collection reference is not set.");
+                return;
+            }
             // NOTE: This is a destructive action. A custom confirmation modal would be ideal.
             // For now, it deletes directly as per "no confirm()" rule.
             try {
@@ -863,6 +889,10 @@
 
         // --- Delete Link ---
         async function deleteLink(idToDelete) {
+             if (!linksCollectionRef) {
+                 console.error("Links collection reference is not set.");
+                 return;
+            }
             // NOTE: Also destructive. A custom confirmation modal would be ideal.
             try {
                 await deleteDoc(doc(linksCollectionRef, idToDelete));
@@ -875,7 +905,7 @@
         // --- Populate Categories (Sidebar & Admin Dropdown) ---
         function populateCategories() {
             // 1. Clear Sidebar (keeping "All Links")
-            sidebarNav.innerHTML = `<li class="active"><a href="#" data-category="All"><i class="fas fa-th-large fa-fw"></i><span>All Links</span></a></li>`;
+            sidebarNav.innerHTML = `<li class="active"><a href="#" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>`;
             // 2. Clear Admin Dropdown
             linkCategorySelect.innerHTML = '<option value="Uncategorized">Uncategorized</option>';
 
@@ -885,7 +915,7 @@
             sortedCategories.forEach(cat => {
                 // Add to sidebar
                 const li = document.createElement('li');
-                li.innerHTML = `<a href="#" data-category="${cat.name}"><i class="${cat.icon} fa-fw" style="color: ${cat.color};"></i><span>${cat.name}</span></a>`;
+                li.innerHTML = `<a href="#" data-category="${cat.name}"><span class="iconify" data-icon="${cat.icon}" data-fw="true" style="color: ${cat.color};"></span><span>${cat.name}</span></a>`;
                 sidebarNav.appendChild(li);
 
                 // Add to admin dropdown
@@ -944,7 +974,7 @@
 
         // --- Create a single Link Card element ---
         function createLinkCard(link) {
-            const defaultCat = { icon: 'fas fa-link', color: '#718096' };
+            const defaultCat = { icon: 'mdi:link', color: '#718096' }; // Default Iconify icon
             const cat = allCategoriesData.find(c => c.name === link.category) || defaultCat;
             
             const card = document.createElement('div');
@@ -953,19 +983,19 @@
             card.innerHTML = `
                 <div class="card-header">
                     <div class="card-initial-circle">
-                        <i class="${cat.icon} fa-fw"></i>
+                        <span class="iconify" data-icon="${cat.icon}" data-fw="true"></span>
                     </div>
                     <button class="delete-btn" title="Delete Link">
-                        <i class="fas fa-trash-alt fa-fw"></i>
+                        <span class="iconify" data-icon="mdi:delete" data-fw="true"></span>
                     </button>
                 </div>
                 <div class="card-content">
                     <div>
-                        <h3 class="card-title">${link.name}</h3>
-                        <p class="card-subtitle">${link.url}</p>
+                        <h3 class="card-title"></h3>
+                        <p class="card-subtitle"></p>
                     </div>
                     <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="view-btn">
-                        <i class="fas fa-external-link-alt"></i> View Link
+                        <span class="iconify" data-icon="mdi:open-in-new"></span> View Link
                     </a>
                 </div>
             `;
@@ -1050,7 +1080,7 @@
 
             // Define collection paths
             linksCollectionRef = collection(db, 'artifacts', appId, 'users', userId, 'links');
-            categoriesCollectionRef = collection(db, 'artifacts', appId, 'users', userId, 'categories');
+            categoriesCollectionRef = collection(db, 'artifacts', appId, 'users',userId, 'categories');
 
             // --- Categories Listener ---
             if (categoriesUnsubscribe) categoriesUnsubscribe(); // Unsubscribe from old listener
@@ -1061,7 +1091,8 @@
                 populateCategories(); // Update sidebar and dropdown
                 renderLinks(currentCategory); // Re-render links to apply new colors/icons
                 
-                if (!categoryListModal.classList.contains('active')) {
+                // Only update table if modal is open, to avoid layout shifts
+                if (categoryListModal.classList.contains('active')) {
                    populateCategoryTable(); // Update category management table
                 }
             }, (error) => {
@@ -1084,6 +1115,10 @@
         // --- Add Link Handler ---
         if (addLinkForm) addLinkForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+             if (!linksCollectionRef) {
+                 console.error("Links collection reference is not set.");
+                 return;
+            }
             submitBtn.disabled = true;
             submitBtn.textContent = 'Adding...';
 
@@ -1120,11 +1155,11 @@
                  const appContainer = document.querySelector('.app-container');
 
                   if (isMobile) {
-                      sidebar.style.position = 'fixed'; // Start fixed on mobile
-                      appContainer.style.width = '100%';
-                      appContainer.classList.remove('sidebar-mini');
-                      sidebar.classList.remove('mini', 'active'); // Ensure closed and not mini
-                      sidebarOverlay.classList.remove('active');
+                       sidebar.style.position = 'fixed'; // Start fixed on mobile
+                       appContainer.style.width = '100%';
+                       appContainer.classList.remove('sidebar-mini');
+                       sidebar.classList.remove('mini', 'active'); // Ensure closed and not mini
+                       sidebarOverlay.classList.remove('active');
                   } else {
                        sidebar.style.position = 'sticky'; // Start sticky on desktop
                        const isMini = savedSidebarState === 'mini';
