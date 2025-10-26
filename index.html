@@ -117,7 +117,7 @@
              background-color: var(--card-category-color, transparent);
              border-color: var(--card-category-color, var(--dark-border-color));
              color: #fff; /* Default icon color for dark theme against colored bg */
-         }
+       }
         /* Ensure the icon within the circle gets its default dark theme color if .keep-default-icon-color is present */
         body.dark-theme .link-card .card-initial-circle .iconify.keep-default-icon-color {
              color: var(--dark-text-secondary) !important;
@@ -427,13 +427,13 @@
              .app-main-content { padding: 16px; }
              .sidebar-toggle-desktop { display: none; }
              .mobile-sidebar-toggle { display: flex; }
-        }
+         }
          @media (min-width: 993px) { /* Desktop and larger */
              .sidebar-overlay { display: none !important; }
              .app-sidebar.active { transform: none; }
              .sidebar-toggle-desktop { display: flex; }
              .mobile-sidebar-toggle { display: none; }
-        }
+         }
 
         @media (max-width: 576px) { /* Smaller mobile screens */
             .app-header { padding: 0 12px; gap: 8px; height: 50px; }
@@ -610,13 +610,14 @@
          const firebaseConfig = typeof __firebase_config !== 'undefined'
            ? JSON.parse(__firebase_config)
            : {
-               apiKey: "AIzaSyBquWSZVVwJITsN_H943-Fx2Z9uf-V9JQQ",
-               authDomain: "suuu-5293b.firebaseapp.com",
-               projectId: "suuu-5293b",
-               storageBucket: "suuu-5293b.firebasestorage.app",
-               messagingSenderId: "1004581080357",
-               appId: "1:1004581080357:web:c84ebb279776ad171e1ecc",
-               measurementId: "G-KSWY1KL4BS"
+                // This is a fallback config for local testing
+                // Replace with your actual Firebase project config
+                apiKey: "AIzaSy...YOUR_API_KEY", // Placeholder
+                authDomain: "your-project-id.firebaseapp.com",
+                projectId: "your-project-id",
+                storageBucket: "your-project-id.appspot.com",
+                messagingSenderId: "your-sender-id",
+                appId: "1:your-sender-id:web:your-app-id",
            };
 
         // --- App ID (Mandatory for Firestore paths) ---
@@ -749,8 +750,8 @@
                   }
                  appContainer.classList.toggle('sidebar-mini', sidebar.classList.contains('mini'));
                  appContainer.style.width = sidebar.classList.contains('mini')
-                   ? `calc(100% - var(--sidebar-width-mini))`
-                   : `calc(100% - var(--sidebar-width-full))`;
+                  ? `calc(100% - var(--sidebar-width-mini))`
+                  : `calc(100% - var(--sidebar-width-full))`;
                  // Show/Hide appropriate toggles
                  if(sidebarToggleDesktop) sidebarToggleDesktop.style.display = 'flex';
                  if(mobileSidebarToggle) mobileSidebarToggle.style.display = 'none';
@@ -952,7 +953,7 @@
              if (!linksCollectionRef) {
                  console.error("Links collection reference is not set.");
                  return;
-            }
+             }
             // NOTE: Also destructive. A custom confirmation modal would be ideal.
             try {
                 await deleteDoc(doc(linksCollectionRef, idToDelete));
@@ -1185,6 +1186,7 @@
             if (!userId || !db) return;
 
             // Define collection paths
+            // This path is private to the user: artifacts/{appId}/users/{userId}/...
             linksCollectionRef = collection(db, 'artifacts', appId, 'users', userId, 'links');
             categoriesCollectionRef = collection(db, 'artifacts', appId, 'users',userId, 'categories');
 
@@ -1224,7 +1226,7 @@
              if (!linksCollectionRef) {
                  console.error("Links collection reference is not set.");
                  return;
-            }
+             }
             submitBtn.disabled = true;
             submitBtn.textContent = 'Adding...';
 
@@ -1261,19 +1263,19 @@
                  const appContainer = document.querySelector('.app-container');
 
                   if (isMobile) {
-                       sidebar.style.position = 'fixed'; // Start fixed on mobile
-                       appContainer.style.width = '100%';
-                       appContainer.classList.remove('sidebar-mini');
-                       sidebar.classList.remove('mini', 'active'); // Ensure closed and not mini
-                       sidebarOverlay.classList.remove('active');
+                         sidebar.style.position = 'fixed'; // Start fixed on mobile
+                         appContainer.style.width = '100%';
+                         appContainer.classList.remove('sidebar-mini');
+                         sidebar.classList.remove('mini', 'active'); // Ensure closed and not mini
+                         sidebarOverlay.classList.remove('active');
                   } else {
-                       sidebar.style.position = 'sticky'; // Start sticky on desktop
-                       const isMini = savedSidebarState === 'mini';
-                       sidebar.classList.toggle('mini', isMini);
-                       appContainer.classList.toggle('sidebar-mini', isMini);
-                       appContainer.style.width = isMini
-                           ? `calc(100% - var(--sidebar-width-mini))`
-                           : `calc(100% - var(--sidebar-width-full))`;
+                         sidebar.style.position = 'sticky'; // Start sticky on desktop
+                         const isMini = savedSidebarState === 'mini';
+                         sidebar.classList.toggle('mini', isMini);
+                         appContainer.classList.toggle('sidebar-mini', isMini);
+                         appContainer.style.width = isMini
+                             ? `calc(100% - var(--sidebar-width-mini))`
+                             : `calc(100% - var(--sidebar-width-full))`;
                   }
                  // Apply initial display none/flex based on breakpoint for toggles
                  if(sidebarToggleDesktop) sidebarToggleDesktop.style.display = isMobile ? 'none' : 'flex';
@@ -1281,12 +1283,21 @@
 
 
                 // Firebase Auth
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) { await signInWithCustomToken(auth, __initial_auth_token); console.log("Signed in with custom token."); }
-                else { await signInAnonymously(auth); console.log("Signed in anonymously."); }
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                    console.log("Signed in with custom token.");
+                } else {
+                    await signInAnonymously(auth);
+                    console.log("Signed in anonymously.");
+                }
 
                 // Get User ID and Setup Listeners
                 userId = auth.currentUser?.uid;
-                if (!userId) { userId = crypto.randomUUID(); console.warn("Using random UUID for anonymous user."); }
+                if (!userId) {
+                    // Fallback for extreme cases, though signInAnonymously should provide one
+                    userId = crypto.randomUUID();
+                    console.warn("Using random UUID for anonymous user.");
+                }
                 console.log("User ID:", userId);
                 setupFirestoreListeners();
 
@@ -1298,6 +1309,3 @@
     </script>
 </body>
 </html>
-
-
-
