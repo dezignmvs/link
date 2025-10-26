@@ -6,12 +6,12 @@
     <title>Mvs | Dashboard (Links)</title>
     <!-- Iconify for icons --><script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
     <!-- Font: Nippo, Satoshi --><link href="https://api.fontshare.com/v2/css?f[]=nippo@500,600,700&f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+    <!-- D3.js for charts --><script src="https://d3js.org/d3.v7.min.js"></script>
 
     <style>
         /* Original Structure + New Theme */
         :root {
             /* Font */
-            /* UPDATED: Satoshi is explicitly the main font, Nippo for headings/accents if needed */
             --font-main: 'Satoshi', sans-serif;
             --font-heading: 'Nippo', 'Satoshi', sans-serif;
 
@@ -31,6 +31,9 @@
             --light-text-placeholder: #a0aec0;
             --light-border-color: #e2e8f0;
             --light-shadow-color: rgba(0, 0, 0, 0.05);
+            --light-error-text: #ef4444; /* Added for error messages */
+            --light-error-bg: rgba(239, 68, 68, 0.1); /* Added */
+
 
             /* Dark Theme Colors */
             --dark-bg-body: #1a202c;
@@ -47,6 +50,9 @@
             --dark-text-placeholder: #718096;
             --dark-border-color: #4a5568;
             --dark-shadow-color: rgba(0, 0, 0, 0.3);
+            --dark-error-text: #f87171; /* Added */
+            --dark-error-bg: rgba(239, 68, 68, 0.15); /* Added */
+
 
             /* Accent Colors */
             --accent-green: #10b981;
@@ -83,7 +89,7 @@
         body.dark-theme { background-color: var(--dark-bg-body); color: var(--dark-text-primary); }
         body.dark-theme h1, body.dark-theme h2, body.dark-theme h3, body.dark-theme h4, body.dark-theme h5, body.dark-theme h6 { color: var(--dark-text-primary); }
         body.dark-theme ::placeholder { color: var(--dark-text-placeholder); }
-        body.dark-theme .app-sidebar, body.dark-theme .app-header, body.dark-theme .app-breadcrumbs, body.dark-theme .link-card, body.dark-theme .admin-form-container, body.dark-theme .modal {
+        body.dark-theme .app-sidebar, body.dark-theme .app-header, body.dark-theme .app-breadcrumbs, body.dark-theme .link-card, body.dark-theme .admin-form-container, body.dark-theme .modal, body.dark-theme .stat-card, body.dark-theme .chart-card {
             background-color: var(--dark-bg-card); border-color: var(--dark-border-color); box-shadow: 0 1px 3px var(--dark-shadow-color);
         }
         body.dark-theme .sidebar-logo { border-bottom-color: var(--dark-border-color); color: var(--dark-text-primary);}
@@ -153,6 +159,16 @@
         body.dark-theme .modal .btn-secondary:hover { background-color: var(--dark-bg-hover); border-color: var(--dark-text-secondary); color: var(--dark-text-primary); }
          body.dark-theme .modal .btn-danger { border: 1px solid var(--accent-red); background-color: transparent; color: var(--accent-red); }
         body.dark-theme .modal .btn-danger:hover { background-color: rgba(239, 68, 68, 0.15); box-shadow: none; }
+        body.dark-theme .modal .error-message { color: var(--dark-error-text); background-color: var(--dark-error-bg); } /* Added */
+
+
+        /* Dark Theme Analytics */
+        body.dark-theme .stat-card-title { color: var(--dark-text-secondary); }
+        body.dark-theme .stat-card-value { color: var(--dark-text-primary); }
+        body.dark-theme .stat-card-footer { color: var(--dark-text-secondary); }
+        body.dark-theme .chart-card h2 { color: var(--dark-text-primary); }
+        body.dark-theme .chart-legend-item span { color: var(--dark-text-primary); }
+        body.dark-theme .d3-tooltip { background: #000; color: #fff; }
 
         /* --- App Container & Main Content --- */
         .app-container {
@@ -336,6 +352,125 @@
         .admin-form-container button[type="submit"] { background-color: var(--accent-green); color: white; border: none; width: 100%; padding: 10px 12px; font-size: 0.95rem; font-weight: 600; border-radius: 6px; cursor: pointer; transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease; margin-top: 16px; }
         .admin-form-container button[type="submit"]:hover { background-color: var(--accent-green-dark); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
 
+        /* --- NEW: Analytics Page Styles --- */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            padding-top: 24px;
+        }
+        .stat-card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            align-content: start;
+        }
+        .stat-card {
+            background-color: var(--light-bg-card);
+            border: 1px solid var(--light-border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px var(--light-shadow-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+        }
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .stat-card-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--light-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .stat-card-icon {
+            font-size: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .stat-card-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            color: var(--light-text-primary);
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+        .stat-card-footer {
+            font-size: 0.8rem;
+            color: var(--light-text-secondary);
+        }
+        .chart-card {
+            background-color: var(--light-bg-card);
+            border: 1px solid var(--light-border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px var(--light-shadow-color);
+            padding: 24px;
+            position: sticky;
+            top: 24px; /* Sticks relative to app-main-content padding */
+        }
+        .chart-card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #chart-container {
+            width: 100%;
+            position: relative;
+        }
+        .chart-legend {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chart-legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .legend-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        .chart-legend-item span {
+            color: var(--light-text-primary);
+            font-weight: 500;
+        }
+        .chart-legend-item .percent {
+            margin-left: auto;
+            color: var(--light-text-secondary);
+            font-size: 0.8rem;
+        }
+        .d3-tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.85rem;
+            background: var(--light-bg-card);
+            border: 1px solid var(--light-border-color);
+            border-radius: 6px;
+            box-shadow: 0 2px 5px var(--light-shadow-color);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
         /* --- Footer --- */
         .app-footer { color: var(--light-text-secondary); border-top: 1px solid var(--light-border-color); font-size: 0.8rem; text-align: center; padding: 20px 24px; margin-top: auto; flex-shrink: 0; }
 
@@ -376,6 +511,27 @@
         .modal .form-group label { margin-bottom: 4px; font-size: 0.8rem; }
         .modal .form-group input, .modal .form-group select { padding: 8px 10px; font-size: 0.85rem; }
         .modal input[type="color"] { height: 38px; }
+
+        /* --- NEW: Confirmation Modal --- */
+        .modal .error-message {
+            font-size: 0.8rem;
+            color: var(--light-error-text);
+            background-color: var(--light-error-bg);
+            border: 1px solid var(--light-error-text);
+            padding: 8px 10px;
+            border-radius: 4px;
+            margin-top: 12px;
+            display: none; /* Hidden by default */
+        }
+        .modal #confirmation-prompt {
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            color: var(--light-text-secondary);
+        }
+        body.dark-theme .modal #confirmation-prompt {
+             color: var(--dark-text-secondary);
+        }
+
 
         /* Category Table Styles */
         .category-table-wrapper { max-height: 50vh; overflow-y: auto; border: 1px solid var(--light-border-color); border-radius: 6px; }
@@ -427,6 +583,10 @@
              .app-main-content { padding: 16px; }
              .sidebar-toggle-desktop { display: none; }
              .mobile-sidebar-toggle { display: flex; }
+             
+             /* Analytics Mobile */
+             .analytics-grid { grid-template-columns: 1fr; }
+             .chart-card { position: static; top: auto; }
          }
          @media (min-width: 993px) { /* Desktop and larger */
              .sidebar-overlay { display: none !important; }
@@ -456,6 +616,10 @@
              .modal-actions { flex-direction: column; gap: 8px; }
              .modal-actions button { width: 100%; }
              .category-table th, .category-table td { padding: 8px 10px; font-size: 0.8rem; }
+             
+             /* Analytics Mobile */
+             .stat-card-container { grid-template-columns: 1fr; gap: 12px; }
+             .analytics-grid { gap: 16px; padding-top: 16px; }
          }
     </style>
 </head>
@@ -477,7 +641,8 @@
              <div class="sidebar-nav-title">Navigation</div>
              <ul class="sidebar-nav" id="sidebar-nav">
                  <!-- The 'All Links' item needs explicit styling if it's active -->
-                 <li data-category="All"><a href="#" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
+                 <li data-page="Links" data-category="All"><a href="#" data-page="Links" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
+                 <!-- REMOVED Analytics Link from here -->
                  <!-- Categories populated by JS -->
              </ul>
         </div>
@@ -508,6 +673,10 @@
                 </button>
                 <button id="fullscreen-toggle" class="header-icon-button" title="Toggle Fullscreen">
                     <span class="iconify" data-icon="mdi:arrow-expand"></span>
+                </button>
+                <!-- NEW Analytics Button -->
+                <button id="analytics-btn" class="header-icon-button" title="Analytics">
+                     <span class="iconify" data-icon="mdi:chart-pie"></span>
                 </button>
                 <button id="add-btn" class="header-icon-button" title="Add Link">
                     <span class="iconify" data-icon="mdi:plus"></span>
@@ -548,6 +717,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- NEW: Analytics Page Content -->
+        <div id="analytics-page" style="display: none;" class="app-main-content">
+            <div class="analytics-grid">
+                <!-- Left Side: Stat Cards -->
+                <div class="stat-card-container" id="stat-card-container">
+                    <!-- Stat cards will be dynamically generated here -->
+                </div>
+                <!-- Right Side: Chart -->
+                <div class.="chart-card-wrapper">
+                    <div class="chart-card">
+                        <h2>Link Distribution</h2>
+                        <div id="chart-container"></div>
+                        <div class="chart-legend" id="chart-legend">
+                            <!-- Legend items will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- App Footer -->
         <footer class="app-footer"> © copyright by dezign.mvs </footer>
@@ -598,6 +788,31 @@
             </form>
         </div>
     </div>
+    
+    <!-- NEW: Confirmation Modal -->
+    <div class="modal-overlay" id="confirmation-modal">
+         <div class="modal modal-small">
+            <div class="modal-header">
+                <h2 id="confirmation-title">Confirmation Required</h2>
+                <button class="modal-close-btn" data-target="confirmation-modal">&times;</button>
+            </div>
+            <div class="modal-content">
+                <p id="confirmation-prompt">Please enter '340' to confirm:</p>
+                <div class="form-group">
+                    <input type="text" id="confirmation-input" placeholder="Enter code..." required>
+                </div>
+                <div id="confirmation-error" class="error-message">Incorrect code entered.</div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="confirm-action-btn" class="btn-primary">Confirm</button>
+                <button type="button" class="btn-secondary modal-close-btn" data-target="confirmation-modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- D3 Tooltip -->
+    <div id="d3-tooltip" class="d3-tooltip"></div>
+
 
     <!-- Javascript (Implementations Added) -->
     <script type="module">
@@ -627,6 +842,7 @@
 
         let app; let db; let auth; let userId = null;
         let linksUnsubscribe = null; let categoriesUnsubscribe = null;
+        let myDonutChart = null; // To hold the D3 chart object
 
         try {
              app = initializeApp(firebaseConfig);
@@ -649,9 +865,13 @@
         // ---
         const sidebarOverlay = document.getElementById('sidebar-overlay');
         const mainContent = document.getElementById('main-content');
-        const publicPage = document.getElementById('public-page'); const adminPage = document.getElementById('admin-page');
-        const addBtn = document.getElementById('add-btn'); const themeToggleBtn = document.getElementById('theme-toggle');
+        const publicPage = document.getElementById('public-page'); 
+        const adminPage = document.getElementById('admin-page');
+        const analyticsPage = document.getElementById('analytics-page'); // NEW
+        const addBtn = document.getElementById('add-btn'); 
+        const themeToggleBtn = document.getElementById('theme-toggle');
         const fullscreenToggleBtn = document.getElementById('fullscreen-toggle');
+        const analyticsBtn = document.getElementById('analytics-btn'); // NEW
         const linksContainer = document.getElementById('links-container');
         const addLinkForm = document.getElementById('add-link-form'); const linkName = document.getElementById('link-name');
         const linkCategorySelect = document.getElementById('link-category-select'); const linkUrl = document.getElementById('link-url');
@@ -672,10 +892,25 @@
         const categoryEditColor = document.getElementById('category-edit-color');
         const categorySaveBtn = document.getElementById('category-save-btn');
         const backToPublicBtn = document.getElementById('back-to-public-btn');
+        // Analytics DOM Elements
+        const statCardContainer = document.getElementById('stat-card-container');
+        const chartContainer = document.getElementById('chart-container');
+        const chartLegend = document.getElementById('chart-legend');
+        const tooltip = d3.select("#d3-tooltip");
+        // NEW Confirmation Modal Elements
+        const confirmationModal = document.getElementById('confirmation-modal');
+        const confirmationTitle = document.getElementById('confirmation-title');
+        const confirmationPrompt = document.getElementById('confirmation-prompt');
+        const confirmationInput = document.getElementById('confirmation-input');
+        const confirmationError = document.getElementById('confirmation-error');
+        const confirmActionBtn = document.getElementById('confirm-action-btn');
 
-        let allLinksData = []; let allCategoriesData = []; let currentCategory = 'All';
+        let allLinksData = []; let allCategoriesData = []; 
+        let currentView = 'Links'; // Can be 'Links', 'Analytics', 'Admin'
+        let currentCategory = 'All'; // For link filtering
         const mobileBreakpoint = 992;
         const categoryToKeepDefaultIcon = 'User'; // Define the category name here
+        let confirmationCallback = null; // Stores the function to call on successful confirmation
 
         // --- Theme Toggle Logic ---
         function applyTheme(isDark) {
@@ -690,6 +925,10 @@
              if(themeToggleBtn) themeToggleBtn.innerHTML = `<span class="iconify" data-icon="${themeIcon}"></span>`;
              // Re-apply sidebar styles after theme change
              updateSidebarActiveState();
+             // Re-draw chart if it exists and analytics page is active
+             if (currentView === 'Analytics') {
+                calculateAndDisplayAnalytics();
+             }
          }
         if(themeToggleBtn) themeToggleBtn.addEventListener('click', () => applyTheme(!body.classList.contains('dark-theme')));
 
@@ -726,6 +965,13 @@
              mainContent.classList.toggle('sidebar-mini');
              const state = sidebar.classList.contains('mini') ? 'mini' : 'full';
              localStorage.setItem('sidebarState', state);
+             // Re-draw chart on sidebar toggle to fix width
+             if (currentView === 'Analytics') {
+                // Wait for transition to finish
+                setTimeout(() => {
+                    calculateAndDisplayAnalytics();
+                }, 300);
+             }
         });
 
         window.addEventListener('resize', () => {
@@ -758,28 +1004,86 @@
                  if(sidebarToggleDesktop) sidebarToggleDesktop.style.display = 'flex';
                  if(mobileSidebarToggle) mobileSidebarToggle.style.display = 'none';
              }
+             // Re-draw chart on resize
+             if (currentView === 'Analytics') {
+                calculateAndDisplayAnalytics();
+             }
+        });
+        
+        // --- Page Switching Logic ---
+        function showAdminPage() {
+             currentView = 'Admin';
+             publicPage.style.display = 'none'; 
+             adminPage.style.display = 'block'; 
+             analyticsPage.style.display = 'none';
+             addLinkForm.reset();
+             updateBreadcrumbs('Add Link');
+             updateSidebarActiveState(); // Ensure sidebar isn't highlighted
+        }
+        function showPublicPage(category = 'All') {
+             currentView = 'Links';
+             currentCategory = category;
+             publicPage.style.display = 'block'; 
+             adminPage.style.display = 'none'; 
+             analyticsPage.style.display = 'none';
+             updateBreadcrumbs(category);
+             renderLinks(category);
+             updateSidebarActiveState();
+        }
+        function showAnalyticsPage() {
+            currentView = 'Analytics';
+            publicPage.style.display = 'none';
+            adminPage.style.display = 'none';
+            analyticsPage.style.display = 'block';
+            updateBreadcrumbs('Analytics');
+            calculateAndDisplayAnalytics(); // Calculate and draw
+            updateSidebarActiveState(); // Ensure sidebar isn't highlighted
+        }
+
+        // --- Confirmation Modal Logic ---
+        function openConfirmationModal(title, prompt, onConfirm) {
+            confirmationTitle.textContent = title;
+            confirmationPrompt.textContent = prompt;
+            confirmationInput.value = ''; // Clear input
+            confirmationError.style.display = 'none'; // Hide error
+            confirmationCallback = onConfirm; // Store the function to run on success
+            openModal('confirmation-modal');
+            confirmationInput.focus(); // Focus the input field
+        }
+
+        if (confirmActionBtn) confirmActionBtn.addEventListener('click', () => {
+            const enteredCode = confirmationInput.value.trim();
+            if (enteredCode === '340') {
+                confirmationError.style.display = 'none';
+                if (typeof confirmationCallback === 'function') {
+                    confirmationCallback(); // Execute the stored action
+                }
+                closeModal('confirmation-modal');
+            } else {
+                confirmationError.style.display = 'block'; // Show error
+                confirmationInput.focus();
+                confirmationInput.select();
+            }
+        });
+        
+        // Add event listener for Enter key in confirmation input
+        if(confirmationInput) confirmationInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                confirmActionBtn.click(); // Trigger the confirm button click
+            }
         });
 
-        // --- Admin Page Toggle Logic ---
-        function showAdminPage() {
-             publicPage.style.display = 'none'; adminPage.style.display = 'block'; addLinkForm.reset();
-             // Update breadcrumbs
-             const adminCrumb = document.getElementById('admin-crumb');
-             if (!adminCrumb) {
-                 const newCrumb = document.createElement('li');
-                 newCrumb.id = 'admin-crumb'; newCrumb.textContent = 'Add Link';
-                 if(breadcrumbList) breadcrumbList.appendChild(newCrumb);
-             }
-        }
-        function showPublicPage() {
-             adminPage.style.display = 'none'; publicPage.style.display = 'block';
-             const adminCrumb = document.getElementById('admin-crumb');
-             if (adminCrumb) adminCrumb.remove();
-             // No need to fetch, snapshot listener handles updates. Just re-render.
-             renderLinks(currentCategory);
-        }
-        if (addBtn) addBtn.addEventListener('click', showAdminPage);
-        if (backToPublicBtn) backToPublicBtn.addEventListener('click', showPublicPage);
+
+        // MODIFIED: Add Button Listener to use Confirmation
+        if (addBtn) addBtn.addEventListener('click', () => {
+             openConfirmationModal(
+                 'Add New Link',
+                 "Enter Code",
+                 showAdminPage // Pass the function to call on success
+             );
+        });
+        if (backToPublicBtn) backToPublicBtn.addEventListener('click', () => showPublicPage(currentCategory));
+        if (analyticsBtn) analyticsBtn.addEventListener('click', showAnalyticsPage); // NEW Listener for header button
 
         // --- Modal Handling ---
         function openModal(modalId) {
@@ -789,6 +1093,12 @@
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             if (modal) modal.classList.remove('active');
+             // Reset confirmation callback when any modal closes
+             if (modalId === 'confirmation-modal') {
+                 confirmationCallback = null;
+                 confirmationInput.value = '';
+                 confirmationError.style.display = 'none';
+             }
         }
         document.querySelectorAll('.modal-close-btn').forEach(btn => btn.addEventListener('click', () => closeModal(btn.dataset.target)));
         document.querySelectorAll('.modal-overlay').forEach(overlay => overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(overlay.id); }));
@@ -938,9 +1248,8 @@
                 console.error("Categories collection reference is not set.");
                 return;
             }
-            // NOTE: This is a destructive action. A custom confirmation modal would be ideal.
-            // For now, it deletes directly as per "no confirm()" rule.
-            try {
+            // Confirmation for category delete might be useful here too, but sticking to request for now.
+             try {
                 await deleteDoc(doc(categoriesCollectionRef, categoryId));
                 // Now update links that belonged to this category
                 await updateLinksOnCategoryDelete(categoryName);
@@ -950,26 +1259,37 @@
             }
         }
 
-        // --- Delete Link ---
-        async function deleteLink(idToDelete) {
-             if (!linksCollectionRef) {
+        // --- Actual Delete Link Function (called after confirmation) ---
+        async function performDeleteLink(idToDelete) {
+            if (!linksCollectionRef) {
                  console.error("Links collection reference is not set.");
                  return;
              }
-            // NOTE: Also destructive. A custom confirmation modal would be ideal.
             try {
                 await deleteDoc(doc(linksCollectionRef, idToDelete));
+                console.log("Link deleted successfully:", idToDelete);
                 // The onSnapshot listener will update the UI
             } catch (error) {
                 console.error("Error deleting link: ", error);
             }
         }
+        
+        // MODIFIED: Function to trigger delete confirmation
+        function requestDeleteLink(idToDelete) {
+             openConfirmationModal(
+                 'Delete Link',
+                 "Enter Code",
+                 () => performDeleteLink(idToDelete) // Pass the actual delete function
+             );
+        }
+
 
         // --- Populate Categories (Sidebar & Admin Dropdown) ---
         function populateCategories() {
             // 1. Clear Sidebar (keeping "All Links")
-             // UPDATED: Use a list item for 'All Links' as well
-             sidebarNav.innerHTML = `<li data-category="All"><a href="#" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>`;
+             sidebarNav.innerHTML = `
+                <li data-page="Links" data-category="All"><a href="#" data-page="Links" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
+             `; // Removed Analytics li
 
             // 2. Clear Admin Dropdown
             linkCategorySelect.innerHTML = '<option value="Uncategorized">Uncategorized</option>';
@@ -981,9 +1301,10 @@
                 // Add to sidebar
                 const li = document.createElement('li');
                 // Store category color in data attribute for easy access
+                li.dataset.page = 'Links'; // This is a link-filtering page
                 li.dataset.category = cat.name;
                 li.dataset.color = cat.color;
-                li.innerHTML = `<a href="#" data-category="${cat.name}"><span class="iconify" data-icon="${cat.icon}" data-fw="true" style="color: ${cat.color};"></span><span>${cat.name}</span></a>`;
+                li.innerHTML = `<a href="#" data-page="Links" data-category="${cat.name}"><span class="iconify" data-icon="${cat.icon}" data-fw="true" style="color: ${cat.color};"></span><span>${cat.name}</span></a>`;
                 sidebarNav.appendChild(li);
 
                 // Add to admin dropdown
@@ -993,7 +1314,7 @@
                 linkCategorySelect.appendChild(option);
             });
 
-            // 4. Set active item based on currentCategory
+            // 4. Set active item based on current view/category
             updateSidebarActiveState();
         }
 
@@ -1011,20 +1332,31 @@
             links.forEach(li => {
                 const a = li.querySelector('a');
                 if (a) {
+                    const page = li.dataset.page;
+                    const category = li.dataset.category;
+
                     // Reset styles first
                     a.style.borderColor = 'transparent';
                     a.style.color = ''; // Reset to default CSS color
                     const icon = a.querySelector('.iconify');
                     if (icon) {
                         // Reset icon color - use category color unless it's 'All'
-                        icon.style.color = (li.dataset.category !== 'All' && li.dataset.color) ? li.dataset.color : '';
+                        icon.style.color = (page === 'Links' && category !== 'All' && li.dataset.color) ? li.dataset.color : '';
+                    }
+                    
+                    let isActive = false;
+                    // Only check for Links page activity
+                     if (page === 'Links' && currentView === 'Links' && category === currentCategory) {
+                        isActive = true;
                     }
 
-                    if (li.dataset.category === currentCategory) {
+
+                    if (isActive) {
                         li.classList.add('active');
                         // Use category color for border and text, or default for 'All'
-                        const activeColor = li.dataset.color || defaultActiveColor;
-                        const borderColor = li.dataset.color || defaultAllLinkBorder; // Use category color for border, fallback for 'All'
+                        const activeColor = (page === 'Links' && li.dataset.color) ? li.dataset.color : defaultActiveColor;
+                        const borderColor = (page === 'Links' && li.dataset.color) ? li.dataset.color : defaultAllLinkBorder;
+                        
                         a.style.borderColor = borderColor;
                         a.style.color = activeColor; // Set text color
                         if (icon) icon.style.color = activeColor; // Match icon color
@@ -1037,26 +1369,33 @@
 
 
         // --- Update Breadcrumbs ---
-        function updateBreadcrumbs(category) {
+        function updateBreadcrumbs(pageOrCategory) {
             breadcrumbList.innerHTML = '<li><a href="#">MyLinks</a></li>';
-            if (category !== 'All') {
+            if (pageOrCategory !== 'All') {
                 const newCrumb = document.createElement('li');
-                newCrumb.textContent = category;
+                newCrumb.textContent = pageOrCategory;
                 breadcrumbList.appendChild(newCrumb);
+            }
+            
+            // Hide search bar on analytics page
+            const searchBar = document.querySelector('.search-bar');
+            if(searchBar) {
+                searchBar.style.display = (currentView === 'Analytics') ? 'none' : 'flex';
             }
         }
 
         // --- Sidebar Category Click Logic ---
         if (sidebarNav) sidebarNav.addEventListener('click', (e) => {
             const link = e.target.closest('a');
-            if (link && link.dataset.category) {
+            if (link) {
                 e.preventDefault();
-                const categoryName = link.dataset.category;
-                currentCategory = categoryName;
-
-                updateSidebarActiveState();
-                updateBreadcrumbs(categoryName);
-                renderLinks(currentCategory); // Render from local data
+                const page = link.dataset.page;
+                
+                // Only handle Links clicks now
+                 if (page === 'Links') {
+                    const categoryName = link.dataset.category;
+                    showPublicPage(categoryName);
+                }
 
                 // If on mobile, close sidebar after click
                 if (window.innerWidth < mobileBreakpoint) {
@@ -1115,10 +1454,11 @@
             card.querySelector('.card-title').textContent = link.name;
             card.querySelector('.card-subtitle').textContent = link.url;
 
-            card.querySelector('.delete-btn').addEventListener('click', (e) => {
+            // MODIFIED: Delete button now calls requestDeleteLink
+             card.querySelector('.delete-btn').addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation(); // Prevent link navigation
-                deleteLink(link.id);
+                requestDeleteLink(link.id); // Use the confirmation request function
             });
 
             return card;
@@ -1183,6 +1523,168 @@
         }
         if (searchInput) searchInput.addEventListener('input', filterLinksBySearch);
 
+        // --- NEW: Analytics Functions ---
+        
+        // Helper to format time
+        function formatTimeAgo(date) {
+            if (!date) return 'N/A';
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " years ago";
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " months ago";
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " days ago";
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " hours ago";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " minutes ago";
+            return "Just now";
+        }
+
+        function calculateAndDisplayAnalytics() {
+            if (!allLinksData || !allCategoriesData) return;
+
+            const defaultCat = { name: 'Uncategorized', icon: 'mdi:link', color: '#718096' };
+            const totalLinks = allLinksData.length;
+            
+            // 1. Initialize stats from categories
+            let stats = allCategoriesData.map(cat => ({
+                name: cat.name,
+                icon: cat.icon,
+                color: cat.color,
+                count: 0,
+                lastUpdated: null
+            }));
+            stats.push({ ...defaultCat, count: 0, lastUpdated: null }); // Add Uncategorized
+
+            // 2. Process links
+            allLinksData.forEach(link => {
+                let categoryName = link.category || 'Uncategorized';
+                let stat = stats.find(s => s.name === categoryName);
+                if (!stat) {
+                    // This case handles links with a category that was deleted
+                    stat = stats.find(s => s.name === 'Uncategorized');
+                }
+                
+                stat.count++;
+                const linkDate = link.createdAt?.toDate ? link.createdAt.toDate() : null;
+                if (linkDate && (!stat.lastUpdated || linkDate > stat.lastUpdated)) {
+                    stat.lastUpdated = linkDate;
+                }
+            });
+
+            // 3. Filter out categories with 0 links and calculate percentages
+            const finalStats = stats.filter(s => s.count > 0).map(s => ({
+                ...s,
+                percentage: totalLinks > 0 ? (s.count / totalLinks) * 100 : 0
+            }));
+            
+            // 4. Render
+            renderStatCards(finalStats);
+            drawDonutChart(finalStats);
+            drawChartLegend(finalStats);
+        }
+
+        function renderStatCards(stats) {
+            statCardContainer.innerHTML = ''; // Clear
+            if (stats.length === 0) {
+                 statCardContainer.innerHTML = '<p class="no-search-results" style="grid-column: 1 / -1;">No data to display. Add some links!</p>';
+                 return;
+            }
+            
+            stats.forEach(stat => {
+                const card = document.createElement('div');
+                card.className = 'stat-card';
+                card.innerHTML = `
+                    <div class="stat-card-header">
+                        <div class="stat-card-title">${stat.name}</div>
+                        <div class="stat-card-icon" style="background-color: ${stat.color};">
+                            <span class="iconify" data-icon="${stat.icon}"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="stat-card-value">${stat.count} <span style="font-size: 1.2rem; font-weight: 500;">Links</span></div>
+                        <div class="stat-card-footer">
+                            <span class="iconify" data-icon="mdi:percent-outline" style="vertical-align: -0.1em;"></span> ${stat.percentage.toFixed(1)}% of total
+                        </div>
+                        <div class="stat-card-footer" style="margin-top: 4px;">
+                            <span class="iconify" data-icon="mdi:update" style="vertical-align: -0.1em;"></span> Last: ${formatTimeAgo(stat.lastUpdated)}
+                        </div>
+                    </div>
+                `;
+                statCardContainer.appendChild(card);
+            });
+        }
+        
+        function drawDonutChart(data) {
+            chartContainer.innerHTML = ''; // Clear previous SVG
+            if (data.length === 0) return; // Don't draw if no data
+
+            const width = chartContainer.clientWidth;
+            const height = Math.min(width, 300); // Max height
+            const radius = Math.min(width, height) / 2;
+            const innerRadius = radius * 0.6; // For donut chart
+
+            const svg = d3.select("#chart-container")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+            const pie = d3.pie()
+                .value(d => d.count)
+                .sort(null); // Use data order
+
+            const arc = d3.arc()
+                .innerRadius(innerRadius)
+                .outerRadius(radius);
+
+            const arcs = svg.selectAll(".arc")
+                .data(pie(data))
+                .enter()
+                .append("g")
+                .attr("class", "arc");
+
+            arcs.append("path")
+                .attr("d", arc)
+                .attr("fill", d => d.data.color)
+                .attr("stroke", body.classList.contains('dark-theme') ? 'var(--dark-bg-card)' : 'var(--light-bg-card)')
+                .style("stroke-width", "2px")
+                .on("mouseover", (event, d) => {
+                    d3.select(event.currentTarget).transition().duration(200).attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius * 1.05));
+                    tooltip.style("opacity", 1)
+                           .html(`<strong>${d.data.name}</strong><br>${d.data.count} links (${d.data.percentage.toFixed(1)}%)`)
+                           .style("left", (event.pageX + 10) + "px")
+                           .style("top", (event.pageY - 15) + "px");
+                })
+                .on("mousemove", (event) => {
+                    tooltip.style("left", (event.pageX + 10) + "px")
+                           .style("top", (event.pageY - 15) + "px");
+                })
+                .on("mouseout", (event, d) => {
+                    d3.select(event.currentTarget).transition().duration(200).attr("d", arc);
+                    tooltip.style("opacity", 0);
+                });
+        }
+        
+        function drawChartLegend(data) {
+            chartLegend.innerHTML = ''; // Clear
+            if (data.length === 0) return;
+
+            data.forEach(d => {
+                const item = document.createElement('div');
+                item.className = 'chart-legend-item';
+                item.innerHTML = `
+                    <div class="legend-swatch" style="background-color: ${d.color};"></div>
+                    <span>${d.name}</span>
+                    <span class="percent">${d.percentage.toFixed(1)}%</span>
+                `;
+                chartLegend.appendChild(item);
+            });
+        }
+
         // --- Setup Firestore Listeners ---
         function setupFirestoreListeners() {
             if (!userId || !db) return;
@@ -1199,7 +1701,12 @@
                 allCategoriesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 populateCategories(); // Update sidebar and dropdown
-                renderLinks(currentCategory); // Re-render links to apply new colors/icons
+                
+                if (currentView === 'Links') {
+                    renderLinks(currentCategory); // Re-render links to apply new colors/icons
+                } else if (currentView === 'Analytics') {
+                    calculateAndDisplayAnalytics(); // Re-calculate analytics
+                }
 
                 // Only update table if modal is open, to avoid layout shifts
                 if (categoryListModal.classList.contains('active')) {
@@ -1215,7 +1722,11 @@
                 console.log("Links snapshot received");
                 allLinksData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-                renderLinks(currentCategory); // Re-render links
+                if (currentView === 'Links') {
+                    renderLinks(currentCategory); // Re-render links
+                } else if (currentView === 'Analytics') {
+                    calculateAndDisplayAnalytics(); // Re-calculate analytics
+                }
             }, (error) => {
                 console.error("Error fetching links:", error);
                 linksContainer.innerHTML = `<p class="no-search-results">Error loading links: ${error.message}</p>`;
@@ -1283,7 +1794,6 @@
                  if(sidebarToggleDesktop) sidebarToggleDesktop.style.display = isMobile ? 'none' : 'flex';
                  if(mobileSidebarToggle) mobileSidebarToggle.style.display = isMobile ? 'flex' : 'none';
 
-
                 // Firebase Auth
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -1302,6 +1812,9 @@
                 }
                 console.log("User ID:", userId);
                 setupFirestoreListeners();
+                
+                // Show default page
+                showPublicPage('All');
 
             } catch (error) { console.error("Error during initialization or auth: ", error); linksContainer.innerHTML = `<p class='no-search-results'>Error during startup: ${error.message}.</p>`; }
         }
