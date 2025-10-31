@@ -253,7 +253,7 @@
              background-color: var(--light-bg-header); border-bottom: 1px solid var(--light-border-color);
              flex-shrink: 0; box-shadow: 0 1px 3px var(--light-shadow-color); height: 60px;
              transition: background-color var(--transition-speed) var(--transition-ease), border-color var(--transition-speed) var(--transition-ease);
-         }
+        }
         .header-left { display: flex; align-items: center; gap: 16px; }
         .header-controls { display: flex; gap: 12px; align-items: center; margin-left: auto; }
 
@@ -263,7 +263,7 @@
              width: 38px; height: 38px; border-radius: 6px; font-size: 1.1rem; cursor: pointer;
              display: none; align-items: center; justify-content: center;
              transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, border-color 0.2s ease;
-         }
+        }
           .mobile-sidebar-toggle:hover { background-color: var(--light-bg-hover); color: var(--light-text-primary); border-color: var(--light-text-secondary); }
 
         .search-bar { position: relative; max-width: 350px; flex-grow: 1; }
@@ -279,7 +279,7 @@
              border-bottom: 1px solid var(--light-border-color); flex-shrink: 0;
              transition: background-color var(--transition-speed) var(--transition-ease), border-color var(--transition-speed) var(--transition-ease);
              font-size: 0.85rem; box-shadow: 0 1px 2px var(--light-shadow-color);
-         }
+        }
         .app-breadcrumbs ul { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: 8px; }
         .app-breadcrumbs li { color: var(--light-text-secondary); }
         .app-breadcrumbs li:not(:last-child)::after { content: '/'; margin-left: 8px; color: var(--light-text-secondary); opacity: 0.6; }
@@ -587,13 +587,13 @@
              /* Analytics Mobile */
              .analytics-grid { grid-template-columns: 1fr; }
              .chart-card { position: static; top: auto; }
-         }
+        }
          @media (min-width: 993px) { /* Desktop and larger */
              .sidebar-overlay { display: none !important; }
              .app-sidebar.active { transform: none; }
              .sidebar-toggle-desktop { display: flex; }
              .mobile-sidebar-toggle { display: none; }
-         }
+        }
 
          @media (max-width: 576px) { /* Smaller mobile screens */
              .app-header { padding: 0 12px; gap: 8px; height: 50px; }
@@ -620,7 +620,7 @@
              /* Analytics Mobile */
              .stat-card-container { grid-template-columns: 1fr; gap: 12px; }
              .analytics-grid { gap: 16px; padding-top: 16px; }
-         }
+        }
     </style>
 </head>
 <body>
@@ -659,12 +659,12 @@
             <div class="header-left">
                  <!-- Mobile Sidebar Toggle -->
                  <button id="mobile-sidebar-toggle" class="mobile-sidebar-toggle" title="Toggle Sidebar">
-                      <span class="iconify" data-icon="mdi:menu"></span>
+                     <span class="iconify" data-icon="mdi:menu"></span>
                  </button>
                  <!-- Search Bar -->
                  <div class="search-bar">
-                      <span class="iconify search-icon" data-icon="mdi:magnify"></span>
-                      <input type="text" id="search-input" placeholder="Search links...">
+                     <span class="iconify search-icon" data-icon="mdi:magnify"></span>
+                     <input type="text" id="search-input" placeholder="Search links...">
                  </div>
             </div>
             <div class="header-controls">
@@ -726,7 +726,7 @@
                     <!-- Stat cards will be dynamically generated here -->
                 </div>
                 <!-- Right Side: Chart -->
-                <div class.="chart-card-wrapper">
+                <div class="chart-card-wrapper">
                     <div class="chart-card">
                         <h2>Link Distribution</h2>
                         <div id="chart-container"></div>
@@ -825,17 +825,17 @@
         // This logic checks for a config provided by the environment,
         // otherwise it uses the corrected fallback config you provided.
          const firebaseConfig = typeof __firebase_config !== 'undefined'
-            ? JSON.parse(__firebase_config)
-            : {
-                 // This is the corrected fallback config from your provided script
-                 apiKey: "AIzaSyDNW_gRO5yY1AhNTWD6ctpELUijCdxspeg",
-                 authDomain: "mvs-link.firebaseapp.com",
-                 projectId: "mvs-link",
-                 storageBucket: "mvs-link.firebasestorage.app",
-                 messagingSenderId: "11522467266",
-                 appId: "1:11522467266:web:906c63d548b0b91923225b",
-                 measurementId: "G-2W6X5837CE"
-           };
+             ? JSON.parse(__firebase_config)
+             : {
+                   // This is the UPDATED fallback config from your request
+                   apiKey: "AIzaSyDbaF6Gb1lNGY9PQbV_9FXa9oOpC7ZiQRU",
+                   authDomain: "nodemailer-445010.firebaseapp.com",
+                   projectId: "nodemailer-445010",
+                   storageBucket: "nodemailer-445010.firebasestorage.app",
+                   messagingSenderId: "785480577605",
+                   appId: "1:785480577605:web:737faddc30a5689cd4692c",
+                   measurementId: "G-HM6MR9BW72"
+               };
 
         // --- App ID (Mandatory for Firestore paths) ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
@@ -927,7 +927,7 @@
              updateSidebarActiveState();
              // Re-draw chart if it exists and analytics page is active
              if (currentView === 'Analytics') {
-                calculateAndDisplayAnalytics();
+                 calculateAndDisplayAnalytics();
              }
          }
         if(themeToggleBtn) themeToggleBtn.addEventListener('click', () => applyTheme(!body.classList.contains('dark-theme')));
@@ -945,10 +945,10 @@
              }
         });
         document.addEventListener('fullscreenchange', () => {
-            if(fullscreenToggleBtn) {
+             if(fullscreenToggleBtn) {
                  const icon = document.fullscreenElement ? 'mdi:arrow-collapse' : 'mdi:arrow-expand';
                  fullscreenToggleBtn.innerHTML = `<span class="iconify" data-icon="${icon}"></span>`;
-            }
+             }
         });
 
         // --- Sidebar Toggle Logic (Original Structure) ---
@@ -967,10 +967,10 @@
              localStorage.setItem('sidebarState', state);
              // Re-draw chart on sidebar toggle to fix width
              if (currentView === 'Analytics') {
-                // Wait for transition to finish
-                setTimeout(() => {
-                    calculateAndDisplayAnalytics();
-                }, 300);
+                 // Wait for transition to finish
+                 setTimeout(() => {
+                     calculateAndDisplayAnalytics();
+                 }, 300);
              }
         });
 
@@ -998,15 +998,15 @@
                   }
                  appContainer.classList.toggle('sidebar-mini', sidebar.classList.contains('mini'));
                  appContainer.style.width = sidebar.classList.contains('mini')
-                  ? `calc(100% - var(--sidebar-width-mini))`
-                  : `calc(100% - var(--sidebar-width-full))`;
+                 ? `calc(100% - var(--sidebar-width-mini))`
+                 : `calc(100% - var(--sidebar-width-full))`;
                  // Show/Hide appropriate toggles
                  if(sidebarToggleDesktop) sidebarToggleDesktop.style.display = 'flex';
                  if(mobileSidebarToggle) mobileSidebarToggle.style.display = 'none';
              }
              // Re-draw chart on resize
              if (currentView === 'Analytics') {
-                calculateAndDisplayAnalytics();
+                 calculateAndDisplayAnalytics();
              }
         });
         
@@ -1019,7 +1019,7 @@
              addLinkForm.reset();
              updateBreadcrumbs('Add Link');
              updateSidebarActiveState(); // Ensure sidebar isn't highlighted
-        }
+         }
         function showPublicPage(category = 'All') {
              currentView = 'Links';
              currentCategory = category;
@@ -1029,7 +1029,7 @@
              updateBreadcrumbs(category);
              renderLinks(category);
              updateSidebarActiveState();
-        }
+         }
         function showAnalyticsPage() {
             currentView = 'Analytics';
             publicPage.style.display = 'none';
@@ -1254,24 +1254,24 @@
                 // Now update links that belonged to this category
                 await updateLinksOnCategoryDelete(categoryName);
                 // The onSnapshot listener will repopulate the table
-            } catch (error) {
-                console.error("Error deleting category: ", error);
-            }
+             } catch (error) {
+                 console.error("Error deleting category: ", error);
+             }
         }
 
         // --- Actual Delete Link Function (called after confirmation) ---
         async function performDeleteLink(idToDelete) {
-            if (!linksCollectionRef) {
+             if (!linksCollectionRef) {
                  console.error("Links collection reference is not set.");
                  return;
              }
-            try {
-                await deleteDoc(doc(linksCollectionRef, idToDelete));
-                console.log("Link deleted successfully:", idToDelete);
-                // The onSnapshot listener will update the UI
-            } catch (error) {
-                console.error("Error deleting link: ", error);
-            }
+             try {
+                 await deleteDoc(doc(linksCollectionRef, idToDelete));
+                 console.log("Link deleted successfully:", idToDelete);
+                 // The onSnapshot listener will update the UI
+             } catch (error) {
+                 console.error("Error deleting link: ", error);
+             }
         }
         
         // MODIFIED: Function to trigger delete confirmation
@@ -1288,7 +1288,7 @@
         function populateCategories() {
             // 1. Clear Sidebar (keeping "All Links")
              sidebarNav.innerHTML = `
-                <li data-page="Links" data-category="All"><a href="#" data-page="Links" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
+                 <li data-page="Links" data-category="All"><a href="#" data-page="Links" data-category="All"><span class="iconify" data-icon="mdi:view-grid" data-fw="true"></span><span>All Links</span></a></li>
              `; // Removed Analytics li
 
             // 2. Clear Admin Dropdown
@@ -1323,11 +1323,11 @@
             const links = sidebarNav.querySelectorAll('li');
             const computedStyle = getComputedStyle(body);
             const defaultActiveColor = body.classList.contains('dark-theme')
-                ? computedStyle.getPropertyValue('--dark-text-secondary').trim()
-                : computedStyle.getPropertyValue('--light-text-secondary').trim();
+                 ? computedStyle.getPropertyValue('--dark-text-secondary').trim()
+                 : computedStyle.getPropertyValue('--light-text-secondary').trim();
             const defaultAllLinkBorder = body.classList.contains('dark-theme')
-                ? computedStyle.getPropertyValue('--dark-border-color').trim()
-                : computedStyle.getPropertyValue('--light-border-color').trim();
+                 ? computedStyle.getPropertyValue('--dark-border-color').trim()
+                 : computedStyle.getPropertyValue('--light-border-color').trim();
 
             links.forEach(li => {
                 const a = li.querySelector('a');
@@ -1347,8 +1347,8 @@
                     let isActive = false;
                     // Only check for Links page activity
                      if (page === 'Links' && currentView === 'Links' && category === currentCategory) {
-                        isActive = true;
-                    }
+                         isActive = true;
+                     }
 
 
                     if (isActive) {
@@ -1393,9 +1393,9 @@
                 
                 // Only handle Links clicks now
                  if (page === 'Links') {
-                    const categoryName = link.dataset.category;
-                    showPublicPage(categoryName);
-                }
+                     const categoryName = link.dataset.category;
+                     showPublicPage(categoryName);
+                 }
 
                 // If on mobile, close sidebar after click
                 if (window.innerWidth < mobileBreakpoint) {
@@ -1456,10 +1456,10 @@
 
             // MODIFIED: Delete button now calls requestDeleteLink
              card.querySelector('.delete-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation(); // Prevent link navigation
-                requestDeleteLink(link.id); // Use the confirmation request function
-            });
+                 e.preventDefault();
+                 e.stopPropagation(); // Prevent link navigation
+                 requestDeleteLink(link.id); // Use the confirmation request function
+             });
 
             return card;
         }
@@ -1776,19 +1776,19 @@
                  const appContainer = document.querySelector('.app-container');
 
                   if (isMobile) {
-                         sidebar.style.position = 'fixed'; // Start fixed on mobile
-                         appContainer.style.width = '100%';
-                         appContainer.classList.remove('sidebar-mini');
-                         sidebar.classList.remove('mini', 'active'); // Ensure closed and not mini
-                         sidebarOverlay.classList.remove('active');
+                           sidebar.style.position = 'fixed'; // Start fixed on mobile
+                           appContainer.style.width = '100%';
+                           appContainer.classList.remove('sidebar-mini');
+                           sidebar.classList.remove('mini', 'active'); // Ensure closed and not mini
+                           sidebarOverlay.classList.remove('active');
                   } else {
-                         sidebar.style.position = 'sticky'; // Start sticky on desktop
-                         const isMini = savedSidebarState === 'mini';
-                         sidebar.classList.toggle('mini', isMini);
-                         appContainer.classList.toggle('sidebar-mini', isMini);
-                         appContainer.style.width = isMini
-                             ? `calc(100% - var(--sidebar-width-mini))`
-                             : `calc(100% - var(--sidebar-width-full))`;
+                           sidebar.style.position = 'sticky'; // Start sticky on desktop
+                           const isMini = savedSidebarState === 'mini';
+                           sidebar.classList.toggle('mini', isMini);
+                           appContainer.classList.toggle('sidebar-mini', isMini);
+                           appContainer.style.width = isMini
+                                ? `calc(100% - var(--sidebar-width-mini))`
+                                : `calc(100% - var(--sidebar-width-full))`;
                   }
                  // Apply initial display none/flex based on breakpoint for toggles
                  if(sidebarToggleDesktop) sidebarToggleDesktop.style.display = isMobile ? 'none' : 'flex';
@@ -1824,4 +1824,3 @@
     </script>
 </body>
 </html>
-
